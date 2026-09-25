@@ -1,5 +1,7 @@
 import Parameter from '/src/components/Parameter/Parameter';
 import Link from '@docusaurus/Link';
+import fisheyeJson from './fisheye.json?raw';
+import fisheyeImage from './fisheye.png';
 
 # Fisheye Projection
 Describes a fisheye projection that is used to render into its parent Viewport. By default, a fisheye rendering is covering 180 degrees field of view and has a 1:1 aspect ratio, though these parameters can be changed with the attributes provided in this node. This projection type counts as a non-linear projection, which requires 4-6 render passes of the application, meaning that the application might render slower when using these kind of projections than a flat projection. In either case, the application does not need to be aware of the projection as this abstract is handled internally and the applications draw method is only called multiple times per frame with different projection methods that are used to create the full fisheye projection.
@@ -67,7 +69,4 @@ This value determines the color that is used for the parts of the image that are
 
 ## Examples
 
-```json file=fisheye.json
-```
-
-![](fisheye.png)
+<Example json={fisheyeJson} file="fisheye.json" image={fisheyeImage} />

@@ -1,5 +1,11 @@
 import Parameter from '/src/components/Parameter/Parameter';
 import Link from '@docusaurus/Link';
+import planarSymmetricJson from './planar-symmetric.json?raw';
+import planarSymmetricImage from './planar-symmetric.png';
+import planarAsymmetricJson from './planar-asymmetric.json?raw';
+import planarAsymmetricImage from './planar-asymmetric.png';
+import planarOrientationJson from './planar-orientation.json?raw';
+import planarOrientationImage from './planar-orientation.png';
 
 # Planar Projection
 Describes a projection for the Viewport that is a flat projection described by simple frustum, which may be asymmetric. If you are building a new configuration file and do not know which projection type you should use, this type is probably the right one.
@@ -29,19 +35,13 @@ A linear offset in meters that is added to the virtual image plane. Must define 
 ## Examples
 
 ### Symmetric
-```json file=planar-symmetric.json
-```
 
-![](planar-symmetric.png)
+<Example json={planarSymmetricJson} file="planar-symmetric.json" image={planarSymmetricImage} />
 
 ### Asymmetric
-```json file=planar-asymmetric.json
-```
 
-![](planar-asymmetric.png)
+<Example json={planarAsymmetricJson} file="planar-asymmetric.json" image={planarAsymmetricImage} />
 
 ### Orientation
-```json file=planar-orientation.json
-```
 
-![](planar-orientation.png)
+<Example json={planarOrientationJson} file="planar-orientation.json" image={planarOrientationImage} />

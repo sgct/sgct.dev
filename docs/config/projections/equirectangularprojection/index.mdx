@@ -1,5 +1,7 @@
 import Parameter from '/src/components/Parameter/Parameter';
 import Link from '@docusaurus/Link';
+import equirectangularJson from './equirectangular.json?raw';
+import equirectangularImage from './equirectangular.png';
 
 # Equirectangular Projection
 This projection method renders an equirectangular projection (also called lat-long projection or equidistant cylindrical projection) is a default projection method used for spherical objects or maps.
@@ -28,7 +30,4 @@ Allowed values: `low`, `256`, `medium`, `512`, `high`, `1k`, `1024`, `1.5k`, `15
 
 ## Examples
 
-```json file=equirectangular.json
-```
-
-![](equirectangular.png)
+<Example json={equirectangularJson} file="equirectangular.json" image={equirectangularImage} />

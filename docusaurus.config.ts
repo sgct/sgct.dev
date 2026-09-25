@@ -42,6 +42,17 @@ const config: Config = {
     ],
   ],
 
+  // `import json from './x.json?raw'` has to hand the component the file's text, not
+  // the parsed object webpack would otherwise produce for a .json import.
+  plugins: [
+    () => ({
+      name: 'raw-asset-loader',
+      configureWebpack: () => ({
+        module: {rules: [{resourceQuery: /^\?raw$/, type: 'asset/source'}]},
+      }),
+    }),
+  ],
+
   markdown: {
     mermaid: true
   },
