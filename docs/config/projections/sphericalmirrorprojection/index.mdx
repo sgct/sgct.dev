@@ -1,0 +1,50 @@
+import Parameter from '/src/components/Parameter/Parameter';
+import Link from '@docusaurus/Link';
+
+# Spherical Mirror Projection
+Used to create a projection used for Paul Bourke’s spherical mirror setup (see here), which makes it possible to use an off-the-shelf projector to create a planetarium-like environment by bouncing the image of a shiny metal mirror. Please note that this is not the only way to produce these kind of images. Depending on your setup and availability of warping meshes, it might suffice to use the FisheyeProjection node type instead and add a single mesh to the parent Viewport instead. The config folder in SGCT contains an example of this using a default 16x9 warping mesh. This projection type specifically deals with the case where you have four different meshes, one for the bottom, top, left, and right parts of the distorted image.
+
+## Parameters
+<Parameter name="type" type="string" defaultValue="SphericalMirrorProjection">
+Defines the type of this projection.
+</Parameter>
+
+<Parameter name="quality" type={<Link to="/docs/config/basetypes#quality">Quality</Link>} optional>
+Determines the pixel resolution of the cube map faces that are individually rendered to create the cylindrical rendering. The higher resolution these cube map faces have, the better quality the resulting cylindrical rendering, but this comes at the expense of increased rendering times. The named values are corresponding:
+
+- `low`: 256
+- `medium`: 512 (the default)
+- `high`: 1024
+- `1k`: 1024
+- `1.5k`: 1536
+- `2k`: 2048
+- `4k`: 4096
+- `8k`: 8192
+- `16k`: 16384
+
+Allowed values: `low`, `256`, `medium`, `512`, `high`, `1k`, `1024`, `1.5k`, `1536`, `2k`, `2048`, `4k`, `4096`, `8k`, `8192`, `16k`, `16384`, `32k`, `32768`, `64k`, `65536`
+</Parameter>
+
+<Parameter name="tilt" type="number" optional>
+Determines the tilt of the "up vector" of the spherical mirror projection. With a tilt of 0, the center of the spherical mirror image is the apex of the half-sphere that is used to reproject the cube map. The default value is 0.
+</Parameter>
+
+<Parameter name="background" type={<Link to="/docs/config/basetypes#color">color</Link>} optional>
+This value determines the color that is used for the parts of the image that are not covered by the spherical mirror image. The alpha component of this color has to be provided even if the final render target does not contain an alpha channel, in which case the alpha value is ignored. All attributes r, g, b, and a must be defined and be between 0 and 1. The default color is a dark gray (0.3, 0.3, 0.3, 1.0).
+</Parameter>
+
+<Parameter name="geometry" type="Object">
+  Describes the warping meshes used for the spherical mirror projection. All four warping meshes have to be present.
+
+  <Parameter name="bottom" type="string">The path to the warping mesh that is loaded for the bottom part of the spherical mirror projection.</Parameter>
+  <Parameter name="left" type="string">The path to the warping mesh that is loaded for the bottom part of the spherical mirror projection.</Parameter>
+  <Parameter name="right" type="string">The path to the warping mesh that is loaded for the bottom part of the spherical mirror projection.</Parameter>
+  <Parameter name="top" type="string">The path to the warping mesh that is loaded for the bottom part of the spherical mirror projection.</Parameter>
+</Parameter>
+
+## Examples
+
+```json file=sphericalmirror.json
+```
+
+![](sphericalmirror.png)

@@ -1,0 +1,74 @@
+import Parameter from '/src/components/Parameter/Parameter';
+
+# Base Types
+
+## ivec2
+<Parameter name="x" type="integer" />
+<Parameter name="y" type="integer" />
+
+## vec2
+<Parameter name="x" type="number" />
+<Parameter name="y" type="number" />
+
+## vec3
+<Parameter name="x" type="number" />
+<Parameter name="y" type="number" />
+<Parameter name="z" type="number" />
+
+## vec4
+<Parameter name="x" type="number" />
+<Parameter name="y" type="number" />
+<Parameter name="z" type="number" />
+<Parameter name="w" type="number" />
+
+## color
+<Parameter name="r" type="number" />
+<Parameter name="g" type="number" />
+<Parameter name="b" type="number" />
+<Parameter name="a" type="number" />
+
+## Spout
+<Parameter name="enabled" type="boolean">Determines whether the output via Spout is enabled.</Parameter>
+<Parameter name="name" type="string" optional>The name under which Spout will share this content. If this value is not specified, a unique name will be automatically generated.</Parameter>
+
+## NDI
+<Parameter name="enabled" type="boolean">Determines whether the output via NDI is enabled.</Parameter>
+<Parameter name="name" type="string" optional>The name under which NDI will share this content. If this value is not specified, a unique name will be automatically generated.</Parameter>
+<Parameter name="group" type="string" optional>A comma-separated list of NDI groups under which NDI will share the content. See the NDI documentation for more information.</Parameter>
+
+## mat4
+A list of 16 numbers.
+
+## Orientation
+
+### Yaw/Pitch/Roll
+<Parameter name="pitch" type="number" />
+<Parameter name="yaw" type="number" />
+<Parameter name="roll" type="number" />
+
+### Quaternion
+<Parameter name="x" type="number" />
+<Parameter name="y" type="number" />
+<Parameter name="z" type="number" />
+<Parameter name="w" type="number" />
+
+## Quality
+Determines the pixel resolution of the cube map faces that are reprojected to create the fisheye rendering. The higher resolution these cube map faces have, the better quality the resulting fisheye rendering, but at the expense of increased rendering times.
+
+Allowed values: `low`, `256`, `medium`, `512`, `high`, `1k`, `1024`, `1.5k`, `1536`, `2k`, `2048`, `4k`, `4096`, `8k`, `8192`, `16k`, `16384`, `32k`, `32768`, `64k`, `65536`
+
+## FOV
+
+### hFov / vFov
+<Parameter name="hfov" type="number">The angle (in degrees) covered by the camera in the horizontal direction. This is a symmetric frustum around the center and provides the same result as providing the `left` and `right` values with the half-angle.</Parameter>
+
+<Parameter name="vfov" type="number">The angle (in degrees) covered by the camera in the vertical direction. This is a symmetric frustum around the center and provides the same result as providing the `up` and `down` values with the half-angle.</Parameter>
+
+### left+right / down+up
+<Parameter name="left" type="number">The angle (in degrees) that is covered by the camera between the central point and the left border of the viewport. The `left` and `right` angles added together are the vertical field of view of the viewport.</Parameter>
+
+<Parameter name="right" type="number">The angle (in degrees) that is covered by the camera between the central point and the right border of the viewport. The `left` and `right` angles added together are the vertical field of view of the viewport.</Parameter>
+
+<Parameter name="down" type="number">The angle (in degrees) that is covered by the camera between the central point and the bottom border of the viewport. The `down` and `up` angles added together are the vertical field of view of the viewport.</Parameter>
+
+<Parameter name="up" type="number">The angle (in degrees) that is covered by the camera between the central point and the top border of the viewport. The `down` and `up` angles added together are the vertical field of view of the viewport.</Parameter>

@@ -1,0 +1,33 @@
+import Parameter from '/src/components/Parameter/Parameter';
+import Link from '@docusaurus/Link';
+
+# User
+Specifies a user position and parameters. In most cases, only a single unnamed user is necessary. However, in more general cases, it is possible to assign Users to specific Viewports to provide a more fine-grained control over the rendering that occurs in that viewport.
+
+## Parameters
+<Parameter name="name" type="string" optional>
+Specifies the name of this user. Each user needs to have a unique name, but there also has to be exactly one user present that has an empty name (or without a `name` attribute) which is used as the default user.
+</Parameter>
+
+<Parameter name="eyeseparation" type="number" optional>
+Determines the eye separation used for stereoscopic viewports. If no viewports in the configuration are using stereo, this setting is ignored.
+</Parameter>
+
+<Parameter name="pos" type={<Link to="/docs/config/basetypes#vec3">vec3</Link>} optional>
+A linear offset of the user position. Must define three float attributes `x`, `y`, and `z`. The default values are `x=0`, `y=0`, `z=0`, meaning that no linear offset is applied to the user's position.
+</Parameter>
+
+<Parameter name="matrix" type={<Link to="/docs/config/basetypes#mat4">mat4</Link>} optional>
+A generic transformation matrix that is applied to the orientation of this user.
+</Parameter>
+
+<Parameter name="orientation" type={<Link to="/docs/config/basetypes#orientation">Orientation</Link>} optional>
+Describes a fixed orientation for the viewing direction of this user. This can be provided either as Euler angles or as a quaternion. This value will overwrite the value specified in `matrix`.
+</Parameter>
+
+<Parameter name="tracking" type="Object[]" optional>
+  Provides information about whether this user should be tracked using a VRPN-based tracker. This child node contains two attributes with information about the tracker that this user should be associated with.
+
+  <Parameter name="tracker" type="string">The name of the tracker group that this user should be linked with. This name must be a name of a Tracker that is specified in this configuration.</Parameter>
+  <Parameter name="device" type="string">The name of the device in the tracker group that should be used to control the tracking for this user. The specified device has to be a Device that was specified in the `tracker`.</Parameter>
+</Parameter>

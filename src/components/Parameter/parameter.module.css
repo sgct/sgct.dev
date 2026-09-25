@@ -1,0 +1,141 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.parameter {
+  border-left: 3px solid var(--ifm-color-primary);
+  margin: 1.75rem 0;
+  /* Keep a deep-linked parameter clear of the sticky navbar. */
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+/* The header spans the full line, from the accent bar to the right edge. */
+/* A parameter with no description is just its header, so drop the rule. */
+.parameter > .header:last-child {
+  border-bottom: none;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1rem;
+  padding: 0.45rem 0.75rem;
+  background-color: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0 var(--ifm-global-radius) 0 0;
+}
+
+.nameLink {
+  display: inline-flex;
+  align-items: baseline;
+  text-decoration: none;
+}
+
+.nameLink:hover {
+  text-decoration: none;
+}
+
+.name {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.hash {
+  margin-left: 0.35rem;
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity var(--ifm-transition-fast, 200ms) ease;
+}
+
+/* The hidden hash costs no visible space: .meta's auto margin absorbs it. */
+.header:hover .hash,
+.nameLink:focus-visible .hash {
+  opacity: 1;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+}
+
+/* Thin rules keep type / flag / default legible as separate facts. */
+.meta > * + * {
+  padding-left: 0.6rem;
+  border-left: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.type {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.optional {
+  color: var(--ifm-color-emphasis-600);
+}
+
+.required {
+  color: var(--ifm-color-warning-dark, var(--ifm-color-emphasis-800));
+}
+
+.default {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.default code {
+  font-size: 0.75rem;
+  vertical-align: baseline;
+  padding: 0.05rem 0.3rem;
+}
+
+.body {
+  padding: 0.75rem 0.75rem 0;
+}
+
+/* MDX wraps the description in <p>, whose bottom margin would break the rhythm. */
+.body > :last-child {
+  margin-bottom: 0;
+}
+
+/* Sub-fields read as subordinate: muted bar, lighter header, smaller name. */
+.nested {
+  border-left-color: var(--ifm-color-emphasis-300);
+  margin: 1rem 0;
+}
+
+.nested > .header {
+  background-color: transparent;
+  border-bottom-color: var(--ifm-color-emphasis-200);
+  padding-block: 0.3rem;
+}
+
+.nested .name {
+  font-size: 0.9rem;
+}
+
+/* Narrow screens: the metadata drops onto its own line, left-aligned. */
+@media screen and (max-width: 576px) {
+  .meta {
+    margin-left: 0;
+    width: 100%;
+  }
+}
