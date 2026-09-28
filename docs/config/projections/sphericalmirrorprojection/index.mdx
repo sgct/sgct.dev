@@ -1,7 +1,7 @@
 import Parameter from '/src/components/Parameter/Parameter';
 import Link from '@docusaurus/Link';
 import sphericalmirrorJson from './sphericalmirror.json?raw';
-import sphericalmirrorImage from './sphericalmirror.png';
+import sphericalmirrorImage from './sphericalmirror.webp';
 
 # Spherical Mirror Projection
 Used to create a projection used for Paul Bourke’s spherical mirror setup (see here), which makes it possible to use an off-the-shelf projector to create a planetarium-like environment by bouncing the image of a shiny metal mirror. Please note that this is not the only way to produce these kind of images. Depending on your setup and availability of warping meshes, it might suffice to use the FisheyeProjection node type instead and add a single mesh to the parent Viewport instead. The config folder in SGCT contains an example of this using a default 16x9 warping mesh. This projection type specifically deals with the case where you have four different meshes, one for the bottom, top, left, and right parts of the distorted image.

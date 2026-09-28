@@ -8,7 +8,7 @@ import codeImport from 'remark-code-import';
 const config: Config = {
   title: 'SGCT',
   tagline: 'Simple Graphics Cluster Toolkit',
-  favicon: 'logo.png',
+  favicon: 'logo.webp',
 
   // https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -67,7 +67,7 @@ const config: Config = {
       title: 'SGCT',
       logo: {
         alt: 'SGCT Logo',
-        src: 'logo.png',
+        src: 'logo.webp',
       },
       items: [
         {

@@ -99,9 +99,9 @@ At this stage, the synchronized variables are available and can be used to perfo
 ### Draw
 This callback is executed by SGCT multiple times per frame and the application has to render its content in this step. The number of times this callback is executed depends on the configuration that was used to start the application. For example: for each monoscopic, flat viewport, the `draw()` callback is called once, for each stereoscopic, flat viewport the `draw()` callback is called twice, once for the left eye, once for the right eye. For a 180 degree fisheye, the draw callback is called four times, once for each environment map cube face that is used to construct the fisheye.
 
-![](stitching-illustration.png)
+![](stitching-illustration.webp)
 
-![](fisheye-cubemap.png)
+![](fisheye-cubemap.webp)
 
 In order to render correctly, the application **has** to use the `RenderData` struct that is passed as an argument to the callback. The struct contains information about the active window, the viewport, and frustum mode that the callback is called for. Most importantly, however, the struct also contains the `modelViewProjectionMatrix` that should be used by the application to render its scene. For the normal OpenGL pipeline, the application should treat this matrix as the projection matrix component and it should continue handling its own model and view matrices, depending on the use case.
 
