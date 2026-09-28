@@ -10,7 +10,7 @@ Any application build with SGCT can receive the following commandline options th
 Sets the configuration file that should be loaded by the application to use as the cluster system. This path should be either an absolute path, or a path relative to the current working directory.
 </Argument>
 
-<Argument name="--help">
+<Argument name="--help" alias="-h">
 Displays the help message listing all available commandline arguments supported by SGCT.
 </Argument>
 
@@ -63,9 +63,9 @@ If set, screenshots will not contain the name of the window if multiple windows 
 </Argument>
 
 <Argument name="--print-wait-message">
-If this is set to true (the default), SGCT will print a message to the console log while the server is waiting for all clients to connect. If this value is false no such message is printed.
+If this is flag is provided, SGCT will print a message to the console log while the server is waiting for all clients to connect.
 </Argument>
 
-<Argument name="--wait-timeout">
+<Argument name="--wait-timeout" value="float">
 This value determines how long the server should wait for all clients to connect and for how long the clients should wait for the server to start.
 </Argument>

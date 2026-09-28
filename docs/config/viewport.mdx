@@ -54,7 +54,7 @@ Supported geometry mesh formats:
 </Parameter>
 
 <Parameter name="tracked" type="boolean" optional>
-Determines whether the field-of-view frustum used for this viewport should be tracking changes to the window configuration. If this value is set to `false`, the field of view set in the beginning will stay unchanged.
+Determines whether the field-of-view frustum used for this viewport should be recalculated each frame to match the window configuration. If this value is set to `false`, the field of view set in the beginning will stay unchanged. If it is `true`, it will change adaptive to, for example, aspect ratio changes.
 </Parameter>
 
 <Parameter name="eye" type="string" optional>

@@ -103,7 +103,7 @@ Determines whether the `draw` callback should be called for viewports in this wi
 </Parameter>
 
 <Parameter name="noerror" type="boolean" optional>
-If this value is set to `false` the graphics API will not perform any error checking. This means that any application will run slightly faster but will behave in an undefined manner in case any rendering error do occur.
+If this value is set to `true` the graphics API will not perform any error checking. This means that any application will run slightly faster but will behave in an undefined manner in case any rendering error do occur.
 </Parameter>
 
 <Parameter name="blitwindowid" type="integer" optional>
@@ -134,7 +134,7 @@ Determines whether the contents of this window should be rendered stereoscopical
 1. `anaglyph_wimmer`: Anaglyph method by Peter Wimmer.
 1. `vertical_interlaced`: A stereo format in which the left and right eye images are interlaced vertically, meaning that each row of the final image is either left or right, switching each row.
 1. `vertical_interlaced_inverted`: The same as `vertical_interlaced`, but with the left and right eye flipped.
-1. `dummy`: A dummy stereo mode to test streoscopic rendering without needing extra equipment. In this stereo mode, the left and the right eye images are rendered on top of each other without any other processing. This option is available to verify that stereo rendering is working for a specific application.
+1. `dummy`: A dummy stereo mode to test stereoscopic rendering without needing extra equipment. In this stereo mode, the left and the right eye images are rendered on top of each other without any other processing. This option is available to verify that stereo rendering is working for a specific application.
 1. `side_by_side`: The resolution of the window is split into a left half and a right half, with each eye being rendered into its half. This is a common stereo format for 3D TVs.
 1. `side_by_side_inverted`: The same as `side_by_side`, but the left and right images are flipped.
 1. `top_bottom`: The same as side_by_side, but instead of separating the window horizontally, the window is split vertically, with the left eye being rendered in the top half of the window and the right image being rendered in the bottom half.
@@ -149,4 +149,10 @@ Allowed values: `none`, `no_stereo`, `active`, `quadbuffer`, `checkerboard`, `ch
 
 <Parameter name="scalablemesh" type="string" optional>
 If this value is specified, a configuration file from Scalable Mesh will be used to fill in many of the values of this window instead, such as the window resolution, location, state of full screen etc. See the specific documentation for Scalable Meshes for more information.
+</Parameter>
+
+<Parameter name="openxr" optional>
+  Settings for the support of OpenXR. If the support is enabled, the OpenXR library will provide all of the information to render the image frame in accordance to the VR-provided that OpenXR is configured with.
+
+  <Parameter name="enabled" type="boolean">Controls whether OpenXR is enabled.</Parameter>
 </Parameter>

@@ -10,11 +10,11 @@ The IP address or the DNS name of the node. If the address is a DNS name, the na
 </Parameter>
 
 <Parameter name="port" type="integer">
-The port at which this node is available at to the server. Please note that operating systems have restricted behavior when trying to open ports lower than a fixed limt. For example, Unix does not allow non-elevated users to open ports \< 1024. As a convention, SGCT usually uses ports staring at 20400, but this is an arbitrary convention without a specific reason.
+The port at which this node is available at to the server. Please note that operating systems have restricted behavior when trying to open ports lower than a fixed limit. For example, Unix does not allow non-elevated users to open ports \< 1024. As a convention, SGCT usually uses ports starting at 20400, but this is an arbitrary convention without a specific reason.
 </Parameter>
 
 <Parameter name="datatransferport" type="integer" optional>
-If this value is set, a socket connection is opened at the provided port that can be used by the application to transmit data between the server and the clients using the `dataTransfer*` callbacks and `transferData` function of the `NetworkManager`. If no value is specified this function will not work and the callbacks will never be called. Please note that operating systems have restricted behavior when trying to open ports lower than a fixed limt. For example, Unix does not allow non-priviledged users to open ports \< 1024.
+If this value is set, a socket connection is opened at the provided port that can be used by the application to transmit data between the server and the clients using the `dataTransfer*` callbacks and `transferData` function of the `NetworkManager`. If no value is specified this function will not work and the callbacks will never be called. Please note that operating systems have restricted behavior when trying to open ports lower than a fixed limit. For example, Unix does not allow non-priviledged users to open ports \< 1024.
 </Parameter>
 
 <Parameter name="swaplock" type="boolean" optional>
