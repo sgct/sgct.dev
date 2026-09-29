@@ -1,0 +1,63 @@
+import anaglyph_amber_blue_json from './anaglyph_amber_blue.json?raw';
+import anaglyph_amber_blue_image from './anaglyph_amber_blue.webp';
+import anaglyph_red_cyan_json from './anaglyph_red_cyan.json?raw';
+import anaglyph_red_cyan_image from './anaglyph_red_cyan.webp';
+import anaglyph_wimmer_json from './anaglyph_wimmer.json?raw';
+import anaglyph_wimmer_image from './anaglyph_wimmer.webp';
+import checkerboard_json from './checkerboard.json?raw';
+import checkerboard_image from './checkerboard.webp';
+import checkerboard_inverted_json from './checkerboard_inverted.json?raw';
+import checkerboard_inverted_image from './checkerboard_inverted.webp';
+import dummy_json from './dummy.json?raw';
+import dummy_image from './dummy.webp';
+import side_by_side_json from './side_by_side.json?raw';
+import side_by_side_image from './side_by_side.webp';
+import side_by_side_inverted_json from './side_by_side_inverted.json?raw';
+import side_by_side_inverted_image from './side_by_side_inverted.webp';
+import top_bottom_json from './top_bottom.json?raw';
+import top_bottom_image from './top_bottom.webp';
+import top_bottom_inverted_json from './top_bottom_inverted.json?raw';
+import top_bottom_inverted_image from './top_bottom_inverted.webp';
+import vertical_interlaced_json from './vertical_interlaced.json?raw';
+import vertical_interlaced_image from './vertical_interlaced.webp';
+import vertical_interlaced_inverted_json from './vertical_interlaced_inverted.json?raw';
+import vertical_interlaced_inverted_image from './vertical_interlaced_inverted.webp';
+
+# Stereoscopy
+This page contains all of the different stereoscopic rendering methods supported by SGCT.
+
+## Anaglyph Amber-Blue
+<Example json={anaglyph_amber_blue_json} file="anaglyph_amber_blue.json" image={anaglyph_amber_blue_image} />
+
+## Anaglyph Red-Cyan
+<Example json={anaglyph_red_cyan_json} file="anaglyph_red_cyan.json" image={anaglyph_red_cyan_image} />
+
+## Anaglyph Wimmer
+<Example json={anaglyph_wimmer_json} file="anaglyph_wimmer.json" image={anaglyph_wimmer_image}>
+Anaglyph with Peter Wimmer's optimized color selection. See more [here](https://www.3dtv.at/Knowhow/AnaglyphComparison_en.aspx).
+</Example>
+
+## Checkerboard
+<Example json={checkerboard_json} file="checkerboard.json" image={checkerboard_image} />
+
+<Example json={checkerboard_inverted_json} file="checkerboard_inverted.json" image={checkerboard_inverted_image}>inverted</Example>
+
+## Dummy
+<Example json={dummy_json} file="dummy.json" image={dummy_image}>
+A dummy stereo rendering where both the left and the right eyes are rendered on top of each other. In general usage not very practical, but this mode can be used when rendering out screenshots as these will be automatically separated into a left/right pair.
+</Example>
+
+## Side-by-side
+<Example json={side_by_side_json} file="side_by_side.json" image={side_by_side_image} />
+
+<Example json={side_by_side_inverted_json} file="side_by_side_inverted.json" image={side_by_side_inverted_image}>inverted</Example>
+
+## Top-Bottom
+<Example json={top_bottom_json} file="top_bottom.json" image={top_bottom_image} />
+
+<Example json={top_bottom_inverted_json} file="top_bottom_inverted.json" image={top_bottom_inverted_image}>inverted</Example>
+
+## Vertical Interlaced
+<Example json={vertical_interlaced_json} file="vertical_interlaced.json" image={vertical_interlaced_image} />
+
+<Example json={vertical_interlaced_inverted_json} file="vertical_interlaced_inverted.json" image={vertical_interlaced_inverted_image}>inverted</Example>

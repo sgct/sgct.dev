@@ -1,0 +1,10 @@
+# Terminology
+We use the following terminology to talk about the way how SGCT works.
+
+There is a single *Cluster* that consists of 1 or more *Node*s. Each *Node* usually corresponding to a single computer, but multiple nodes can be executed from the same computer, although this is rarely the most optimal solution. Usually each *Node* will be an individual computer. All *Node*s should be connected via low-latency network connections. One of the *Node*s in the *Cluster* is designated as the *server*, whereas the other *Node*s are clients or *Image Generators* (IGs). Even if a *Cluster* only consists of a single *Node*, it is still considered a Server without any clients.
+
+Each *Node* contains 1 or more *Window*s. Each window is using the operating systems default representation and its resolution, position, and other parameter can be configured. The resolution and position are defined in the native units of the operating system, often logical pixels.
+
+Each each *Window* containing 1 or more *Viewport*s. A *Viewport* is a part of a windows into which some 2D or 3D content can be rendered. The position and the size of each *Viewport* is described in a 0-1 range.
+
+If a *Viewport* is set to render 3D content, it must have one of many *Projection* types that determine how the 3D content is rendered. The most common projection type is the *PlanarProjection* in which a horizontal and vertical field-of-view is defined. Another often used projection type is the *FisheyeProjection* in which multiple render passes are automatically combined to generated a square fisheye or dome master image.

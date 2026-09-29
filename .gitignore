@@ -18,3 +18,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Doxygen C++ API reference (npm run generate-api)
+/static/api
+/.doxygen-cache

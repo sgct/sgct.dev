@@ -5,6 +5,10 @@ node('server-misc') {
       sh 'npm ci'
     }
 
+    stage('Generate API') {
+      sh 'npm run generate-api'
+    }
+
     stage('Build') {
       sh 'npm run build'
     }

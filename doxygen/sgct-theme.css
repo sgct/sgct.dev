@@ -1,0 +1,52 @@
+/*
+ * Aligns doxygen-awesome-css with the look of sgct.dev.
+ *
+ * The colors mirror `src/css/custom.css` one-for-one so the generated C++ reference and
+ * the Docusaurus site share a palette, and the font stacks mirror Infima's defaults.
+ *
+ * Variables must be overridden on the same selector that defines them (`html`), and the
+ * dark variant on `html.dark-mode`, because the dark-mode toggle extension is installed.
+ */
+
+html {
+  --primary-color: #2e8555;
+  --primary-dark-color: #205d3b;
+  --primary-light-color: #3cad6e;
+
+  --font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans,
+                 sans-serif, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,
+                           Courier New, monospace;
+}
+
+html.dark-mode {
+  /*
+   * Lighter greens for dark backgrounds, as in the site's `[data-theme='dark']` block.
+   */
+  --primary-color: #25c2a0;
+  --primary-dark-color: #4fddbf;
+  --primary-light-color: #1a8870;
+}
+
+/*
+ * The logo and project name in the sidebar head link back to sgct.dev; keep them
+ * looking like the heading they replace rather than like body links.
+ */
+#projectname a,
+#projectlogo a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#projectname a:hover {
+  color: var(--primary-color);
+}
+
+/*
+ * The version is a `git describe` string, which can be long; keep it inside the
+ * fixed-width sidebar head rather than letting it be clipped.
+ */
+#projectnumber {
+  font-size: 12px;
+  white-space: nowrap;
+}

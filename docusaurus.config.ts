@@ -57,7 +57,18 @@ const config: Config = {
     mermaid: true
   },
 
-  themes: ['@docusaurus/theme-mermaid'],
+  themes: [
+    '@docusaurus/theme-mermaid',
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        indexBlog: false,
+        explicitSearchResultPath: true,
+        highlightSearchTermsOnTargetPage: true,
+      },
+    ]
+  ],
 
   themeConfig: {
     colorMode: {
@@ -73,39 +84,27 @@ const config: Config = {
         {
           type: 'docSidebar',
           position: 'left',
-          sidebarId: 'configSidebar',
-          label: 'Configuration',
+          sidebarId: 'overviewSidebar',
+          label: 'Overview',
         },
         {
           type: 'docSidebar',
           position: 'left',
-          sidebarId: 'commandlineSidebar',
-          label: 'Commandline',
+          sidebarId: 'referenceSidebar',
+          label: 'Reference',
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'buildingSidebar',
+          label: 'Building',
         },
         {
           type: 'docSidebar',
           position: 'left',
           sidebarId: 'examplesSidebar',
-          label: 'Examples',
-        },
-        {
-          type: 'docSidebar',
-          position: 'left',
-          sidebarId: 'featuresSidebar',
-          label: 'Features',
-        },
-        {
-          type: 'docSidebar',
-          position: 'left',
-          sidebarId: 'howItWorksSidebar',
-          label: 'How it works',
-        },
-        {
-          type: 'docSidebar',
-          position: 'left',
-          sidebarId: 'gettingStartedSidebar',
-          label: 'Getting started',
-        },
+          label: 'Examples'
+        }
       ],
     },
     footer: {

@@ -1,0 +1,107 @@
+# `scripts/generate-api.mjs`, which is the only supported way to invoke this file:
+#
+#   npm run generate-api
+
+#---------------------------------------------------------------------------
+# Project
+#---------------------------------------------------------------------------
+PROJECT_NAME           = SGCT
+PROJECT_BRIEF          = "Simple Graphics Cluster Toolkit"
+PROJECT_NUMBER         = $(SGCT_VERSION)
+PROJECT_LOGO           = $(DOXYGEN_LOGO)
+PROJECT_ICON           = $(DOXYGEN_LOGO)
+
+OUTPUT_DIRECTORY       = $(DOXYGEN_OUTPUT)
+HTML_OUTPUT            = api
+
+#---------------------------------------------------------------------------
+# Input
+#---------------------------------------------------------------------------
+INPUT                  = $(SGCT_INCLUDE_DIR) \
+                         $(DOXYGEN_DIR)/mainpage.md
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h \
+                         *.md
+
+# Embedded GLSL string literals, not part of the API surface
+EXCLUDE_PATTERNS       = */internalshaders.h
+
+STRIP_FROM_PATH        = $(SGCT_INCLUDE_ROOT)
+STRIP_FROM_INC_PATH    = $(SGCT_INCLUDE_ROOT)
+
+#---------------------------------------------------------------------------
+# What to extract
+#---------------------------------------------------------------------------
+# Show the complete public surface, including the members that do not carry a comment
+# block yet; an undocumented function is still useful to know about. This also disables
+# the "undocumented member" warnings, which would otherwise drown out the real ones under
+# WARN_AS_ERROR
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = NO
+
+# The SGCT comment blocks open with a plain sentence rather than an explicit \brief, so
+# let the first sentence become the brief description
+JAVADOC_AUTOBRIEF      = YES
+
+BUILTIN_STL_SUPPORT    = YES
+
+# Keep generated file names identical on Windows and on the Linux build agent
+CASE_SENSE_NAMES       = NO
+
+#---------------------------------------------------------------------------
+# Preprocessing
+#---------------------------------------------------------------------------
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
+
+# SGCT_EXPORT comes from <sgct/sgctexports.h>, which CMake generates at build time and
+# which  does not exist in a plain source checkout; without stripping it, it would appear
+# in every single declaration. The feature macros are defined so that the optional NDI,
+# Spout and OpenXR members are documented as well
+PREDEFINED             = SGCT_EXPORT= \
+                         SGCT_HAS_NDI \
+                         SGCT_HAS_SPOUT \
+                         SGCT_HAS_OPENVR
+
+#---------------------------------------------------------------------------
+# Warnings
+#---------------------------------------------------------------------------
+QUIET                  = YES
+# Deliberately not FAIL_ON_WARNINGS: the headers live in the sgct/sgct repository, so a
+# typo in one of their comment blocks must not be able to block a deployment of this site.
+# The generation script echoes the log, which makes the warnings visible in the Jenkins
+# output instead
+WARN_AS_ERROR          = NO
+WARN_LOGFILE           = $(DOXYGEN_WARN_LOGFILE)
+
+#---------------------------------------------------------------------------
+# Output
+#---------------------------------------------------------------------------
+GENERATE_LATEX         = NO
+SEARCHENGINE           = YES
+HAVE_DOT               = YES
+
+#---------------------------------------------------------------------------
+# doxygen-awesome-css
+#
+# The sidebar-only theme variant.
+# GENERATE_TREEVIEW/DISABLE_INDEX/FULL_SIDEBAR/HTML_COLORSTYLE are dictated by the theme;
+# TREEVIEW_WIDTH must match its --side-nav-fixed-width, and HTML_COPY_CLIPBOARD must be
+# off so it does not collide with the fragment copy button.
+#---------------------------------------------------------------------------
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX          = NO
+FULL_SIDEBAR           = NO
+HTML_COLORSTYLE        = LIGHT
+TREEVIEW_WIDTH         = 335
+HTML_COPY_CLIPBOARD    = NO
+
+HTML_HEADER            = $(DOXYGEN_DIR)/header.html
+HTML_EXTRA_STYLESHEET  = $(AWESOME_DIR)/doxygen-awesome.css \
+                         $(AWESOME_DIR)/doxygen-awesome-sidebar-only.css \
+                         $(AWESOME_DIR)/doxygen-awesome-sidebar-only-darkmode-toggle.css \
+                         $(DOXYGEN_DIR)/sgct-theme.css
+HTML_EXTRA_FILES       = $(AWESOME_DIR)/doxygen-awesome-darkmode-toggle.js \
+                         $(AWESOME_DIR)/doxygen-awesome-fragment-copy-button.js \
+                         $(AWESOME_DIR)/doxygen-awesome-paragraph-link.js

@@ -4,13 +4,8 @@ import Header from '/src/components/Hero/Hero';
 
 SGCT is a free cross-platform C++ library for developing OpenGL applications that are synchronized across a cluster of image generating computers (IGs). SGCT is designed to be as simple as possible to use for the developer and targets the use in immersive real-time applications. SGCT supports a large number of output formats, such as planetarium/domes, fisheye projections, equirectangular projections, and many other types of projection types. SGCT also supports a variety of stereoscopic formats such as active quad buffers, passive side-by-side, passive over-and-under, checkerboard/DLP/pixel interlaced, and different kinds of anaglyphic stereoscopy. SGCT applications are scalable and use a JSON configuration file format in which all IGs and their properties are specified. With this approach, there is no need for recompilation of an application for different immersive environments and applications extend naturally to a server-client clustered architecture without recompilation either. In all cases, the client code only needs to render its scene using the provided projection matrices and compositing is then handled internally.
 
-- The [Getting Started](docs/getting-started) page provides information if you want to integrate SGCT into another application. [How it works](docs/how-it-works) provides further information about how to integrate SGCT into other applications and an overview over the frame order SGCT enforces.
-- The [Configuration](docs/config) pages contain documentation about SGCT's JSON-based configuration files; the [Examples](docs/examples) page contains some examples for configuration files, as do the [Projection](docs/config/projections) pages.
-
-## Terminology
-We use the following terminology to talk about the way how SGCT works. There is a single Cluster that consists of 1 or more Nodes, usually corresponding to a single computer. Each Node contains 1 or more Windows with each Window containing 1 or more Viewports. Some viewport types, such as Fisheye projections, can contain multiple Subviewports, which are created automatically. One of the Nodes in the Cluster is designated as the server, where as the other Nodes are clients or Image Generators (IGs).
-
-Please note that in this nomenclature, even if an application is running only on a single machine, it is still considered a cluster, but only consisting of 1 node that also acts as the server for 0 clients.
+- The [Getting Started](docs/building/getting-started) page provides information if you want to integrate SGCT into another application. [How it works](docs/overview/how-it-works) provides further information about how to integrate SGCT into other applications and an overview over the frame order SGCT enforces.
+- The [Configuration](docs/reference/configuration) pages contain documentation about SGCT's JSON-based configuration files; the [Examples](docs/examples) page contains some examples for configuration files, as do the [Projection](docs/reference/configuration/projections) pages.
 
 ## License
 SGCT is licensed under the [3-clause BSD license](https://choosealicense.com/licenses/bsd-3-clause/).

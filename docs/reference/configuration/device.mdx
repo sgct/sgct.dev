@@ -1,0 +1,39 @@
+import Parameter from '/src/components/Parameter/Parameter';
+import Link from '@docusaurus/Link';
+
+# Device
+Specifies a single tracking device that belongs to a specific tracker group.
+
+## Parameters
+<Parameter name="name" type="string">
+Specifies the name of the device so that it can be referenced by a User or can be accessed programmatically by the application.
+</Parameter>
+
+<Parameter name="sensors" type="Object[]" optional>
+  Represents a tracked sensor that provides orientation and position information to the application. The sensors can be accessed through the `TrackingManager` class and its related classes.
+
+  <Parameter name="vrpnaddress" type="string">The VRPN address of this sensor.</Parameter>
+  <Parameter name="id" type="integer">The sensor id for this device. This information is not used by SGCT directly but can be used by the application to distinguish different sensors if multiple sensors are specified in the configuration file.</Parameter>
+</Parameter>
+
+<Parameter name="buttons" type="Object[]" optional>
+  Represents a group of toggle buttons that can be triggered through VRPN. The buttons can be accessed through the `TrackingManager` class and its related classes.
+
+  <Parameter name="vrpnaddress" type="string">The VRPN address of this button group.</Parameter>
+  <Parameter name="count" type="integer">The number of buttons that are advertised and received through the device.</Parameter>
+</Parameter>
+
+<Parameter name="axes" type="Object[]" optional>
+  Represents a number of independent 1D axes that are updated through VRPN. The axes can be accessed through the `TrackingManager` class and its related classes.
+
+  <Parameter name="vrpnaddress" type="string">The VRPN address of this group of axes.</Parameter>
+  <Parameter name="count" type="integer">The number of axes that are advertised by this VRPN device.</Parameter>
+</Parameter>
+
+<Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional>
+A linear offset that is added to the entire device. Must define three float attributes x, y, and z. The default values are x=0, y=0, z=0, leading to no offset being applied.
+</Parameter>
+
+<Parameter name="transformation" type={<Link to="/docs/reference/configuration/basetypes#mat4">mat4</Link>} optional>
+A generic transformation matrix that is applied to this device. This value will overwrite the value specified in `orientation`. All 16 of these values have to be present in this attribute and have to be floating point values and are used in this order to initialize the matrix in a column-major order.
+</Parameter>

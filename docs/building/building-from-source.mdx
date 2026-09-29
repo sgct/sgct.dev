@@ -1,0 +1,30 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Building SGCT from source
+The requirements for building SGCT are:
+
+- CMake version 4.0 or above
+- C++ compiler supporting C++23 (Visual Studio 2016 18, GCC 15, or Clang 21)
+- vcpkg installation
+
+CMake can be downloaded and installed from a package manager (`winget`, `apt`, `yum`, etc) or from the [CMake homepage](https://cmake.org/).
+
+SGCT uses [vcpkg](https://github.com/microsoft/vcpkg) for dependency management. It needs to be installed to be able to compile SGCT and use it in any application. [This page](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started?pivots=shell-powershell) contains detailed information how to install it for different operating systems. **Note**: It is also advised to define `VCPKG_DEFAULT_BINARY_CACHE` as an environment variable and point it to a folder on disk that will be used as a vcpkg cache. This setting overrides where compiled dependencies will be cached and we recommend to place that cache next to the vcpkg install (for example, if `C:/vcpkg` is the vcpkg install directory, use `C:/vcpkg-cache`).
+
+<Tabs>
+  <TabItem value="IDE" label="IDE" default>
+    1. Clone the SGCT repository (`git clone https://github.com/sgct/sgct`)
+    1. Start CMake and drag in the `CMakeLists.txt` file from the SGCT folder
+    1. Select a preset
+    1. Press the "Configure" button
+    1. Press the "Generate" button
+    1. If it exists "Open Project" to open the project file in your IDE
+    1. Compile
+  </TabItem>
+  <TabItem value="cli" label="Commandline">
+    1. Clone the SGCT repository (`git clone https://github.com/sgct/sgct`)
+    1. Pick an existing preset (`cmake --list-presets`)
+    1. Build with preset `cmake --build --preset <preset>`
+  </TabItem>
+</Tabs>
