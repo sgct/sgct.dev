@@ -57,6 +57,28 @@ The Doxygen settings live in `doxygen/Doxyfile`, alongside the HTML header templ
 stylesheet that aligns [doxygen-awesome-css](https://github.com/jothepro/doxygen-awesome-css) with
 this site's palette.
 
+### Toolchain requirements
+
+`doxygen/header.html` is a version-specific template: it carries conditional markers and
+`$placeholder` substitutions that only the Doxygen release which generated it knows how to process,
+and an older Doxygen writes them into the page verbatim instead. The generation script therefore
+reads the version from the template's first line and refuses to run against anything older.
+Distribution packages lag a long way behind here (Ubuntu 22.04 ships 1.9.1), so install a current
+release from [doxygen.nl](https://www.doxygen.nl/download.html) rather than from `apt`.
+
+Because `HAVE_DOT = YES`, Graphviz is required as well; without it every class and include graph
+would be quietly missing from the output, so the script checks for `dot` too.
+
+To move to a newer Doxygen, regenerate the template with that release and re-apply the two local
+changes to it:
+
+```bash
+doxygen -w html doxygen/header.html /dev/null /dev/null
+```
+
+1. the doxygen-awesome-css `<script>` block at the end of `<head>`
+2. the two `https://sgct.dev/` links wrapped around `#projectlogo` and `#projectname`
+
 ## Deployment
 
 Using SSH:

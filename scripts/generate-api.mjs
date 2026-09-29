@@ -85,13 +85,52 @@ function describe({path, ref}) {
   }
 }
 
-function hasDoxygen() {
-  const result = spawnSync('doxygen', ['--version'], {stdio: 'ignore', shell: false});
-  return result.status === 0;
+/** The installed Doxygen version, or null when Doxygen is not on the PATH. */
+function doxygenVersion() {
+  const result = spawnSync('doxygen', ['--version'], {encoding: 'utf8', shell: false});
+  if (result.status !== 0) {
+    return null;
+  }
+  // `doxygen --version` prints `1.18.0 (8e760943e5d9581a444cf327f43a0b4d20d29482)`.
+  return /^[0-9.]+/.exec(result.stdout.trim())?.[0] ?? null;
+}
+
+/**
+ * The version `header.html` was generated with, taken from the comment Doxygen writes on its
+ * first line.
+ *
+ * The template is version-specific: it carries `<!--BEGIN TAG-->` conditionals and `$placeholder`
+ * substitutions that only the release which produced it knows how to process. An older Doxygen
+ * does not recognise them and emits them into the page verbatim, which renders a second sidebar
+ * and a duplicate search box rather than failing.
+ */
+function requiredDoxygenVersion() {
+  const header = readFileSync(join(doxygenDir, 'header.html'), 'utf8');
+  return /HTML header for doxygen ([0-9.]+)/.exec(header)?.[1] ?? null;
+}
+
+/** Whether the Doxyfile asks for Graphviz-rendered graphs. */
+function needsGraphviz() {
+  const doxyfile = readFileSync(join(doxygenDir, 'Doxyfile'), 'utf8');
+  return /^HAVE_DOT\s*=\s*YES/m.test(doxyfile);
+}
+
+/** Returns a negative number when `a` is older than `b`, 0 when they are equal. */
+function compareVersions(a, b) {
+  const left = a.split('.').map(Number);
+  const right = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(left.length, right.length); i += 1) {
+    const difference = (left[i] ?? 0) - (right[i] ?? 0);
+    if (difference !== 0) {
+      return difference;
+    }
+  }
+  return 0;
 }
 
 function main() {
-  if (!hasDoxygen()) {
+  const installed = doxygenVersion();
+  if (!installed) {
     const message =
       'doxygen was not found on PATH. Install it from https://www.doxygen.nl/download.html ' +
       '(or `apt install doxygen`) to generate the C++ API reference.';
@@ -100,6 +139,27 @@ function main() {
       return;
     }
     throw new Error(message);
+  }
+
+  const required = requiredDoxygenVersion();
+  if (required && compareVersions(installed, required) < 0) {
+    throw new Error(
+      `doxygen ${installed} is too old. doxygen/header.html was generated with doxygen ` +
+      `${required}, and older releases emit its conditional markers and $placeholders into the ` +
+      'page instead of processing them. Distribution packages lag badly here (Ubuntu 22.04 ' +
+      `ships 1.9.1); install ${required} or newer from https://www.doxygen.nl/download.html.`
+    );
+  }
+  console.log(`Using doxygen ${installed}`);
+
+  // Without this, Doxygen emits one "Problems running dot" error per graph and produces a page
+  // whose diagrams are simply missing, rather than failing.
+  if (needsGraphviz() && spawnSync('dot', ['-V'], {stdio: 'ignore', shell: false}).status !== 0) {
+    throw new Error(
+      'The Doxyfile sets HAVE_DOT = YES but Graphviz is not on the PATH, so none of the class ' +
+      'and include graphs can be rendered. Install it from https://graphviz.org/download/ ' +
+      '(or `apt install graphviz`), or set HAVE_DOT = NO in doxygen/Doxyfile.'
+    );
   }
 
   mkdirSync(cacheDir, {recursive: true});
