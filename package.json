@@ -8,6 +8,7 @@
     "build": "docusaurus build",
     "generate-api": "node scripts/generate-api.mjs",
     "validate-configs": "node scripts/validate-configs.mjs",
+    "check-reference": "node scripts/check-reference.mjs",
     "lint": "markdownlint-cli2 \"docs/**/*.mdx\" \"src/pages/**/*.mdx\" \"README.md\"",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

@@ -11,27 +11,10 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv2020 from 'ajv/dist/2020.js';
+import { loadSchema } from './sgct-schema.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const docsDir = join(root, 'docs');
-
-async function loadSchema() {
-  const local = process.env.SGCT_SOURCE_DIR;
-  if (local) {
-    const path = join(resolve(local), 'sgct.schema.json');
-    console.log(`Using schema at ${path}`);
-    return JSON.parse(readFileSync(path, 'utf8'));
-  }
-
-  const ref = process.env.SGCT_REF ?? 'master';
-  const url = `https://raw.githubusercontent.com/sgct/sgct/${ref}/sgct.schema.json`;
-  console.log(`Fetching schema from ${url}`);
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Fetching ${url} failed with status ${response.status}`);
-  }
-  return response.json();
-}
 
 /**
  * All JSON files below `directory`, except Docusaurus' own `_category_.json` files.

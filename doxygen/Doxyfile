@@ -100,8 +100,6 @@ HTML_COPY_CLIPBOARD    = NO
 HTML_HEADER            = $(DOXYGEN_DIR)/header.html
 HTML_EXTRA_STYLESHEET  = $(AWESOME_DIR)/doxygen-awesome.css \
                          $(AWESOME_DIR)/doxygen-awesome-sidebar-only.css \
-                         $(AWESOME_DIR)/doxygen-awesome-sidebar-only-darkmode-toggle.css \
                          $(DOXYGEN_DIR)/sgct-theme.css
-HTML_EXTRA_FILES       = $(AWESOME_DIR)/doxygen-awesome-darkmode-toggle.js \
-                         $(AWESOME_DIR)/doxygen-awesome-fragment-copy-button.js \
+HTML_EXTRA_FILES       = $(AWESOME_DIR)/doxygen-awesome-fragment-copy-button.js \
                          $(AWESOME_DIR)/doxygen-awesome-paragraph-link.js

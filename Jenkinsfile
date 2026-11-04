@@ -20,6 +20,11 @@ node('server-misc') {
       sh 'SGCT_SOURCE_DIR=.doxygen-cache/sgct npm run validate-configs'
     }
 
+    stage('Check reference') {
+      // Compares the configuration reference against the same schema revision
+      sh 'SGCT_SOURCE_DIR=.doxygen-cache/sgct npm run check-reference'
+    }
+
     stage('Build') {
       sh 'npm run build'
     }

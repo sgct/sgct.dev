@@ -1,9 +1,8 @@
----
-sidebar_position: 5
----
-
 # Glossary
 This page contains short definitions of the terms that are used throughout this documentation, with links to the pages that describe them in more detail.
+
+## Overview
+There is a single [cluster](#cluster) that consists of one or more [nodes](#node). One of the nodes is designated as the [server](#server), whereas the other nodes are [clients](#client). Each node contains one or more [windows](#window), and each window contains one or more [viewports](#viewport). If a viewport renders 3D content, it must have a [projection](#projection) that determines how the content is rendered.
 
 ## Black level mask
 A grayscale image that is multiplied with the rendering of a viewport to even out the black level of overlapping projectors. See the [`blacklevelmask`](/docs/reference/configuration/viewport#blacklevelmask) value of a viewport.
@@ -18,7 +17,7 @@ A test application that comes with SGCT and renders test patterns, which makes i
 A function that the application registers in the `Engine::Callbacks` struct and that SGCT calls at a specific stage of the frame. See [How it works](/docs/overview/how-it-works).
 
 ## Client
-Every [node](#node) of a cluster that is not the [server](#server). Clients receive the [shared data](#shared-data) from the server and render their part of the image.
+Every [node](#node) of a cluster that is not the [server](#server). Clients receive the [shared data](#shared-data) from the server and render their part of the image. All nodes should be connected via low-latency network connections.
 
 ## Cluster
 The collection of all [nodes](#node) that together run one SGCT application. A cluster is described by a single [configuration file](#configuration-file). See [Cluster](/docs/reference/configuration/cluster).
@@ -45,16 +44,16 @@ The pyramid-shaped volume that is visible through a viewport, described by the f
 A computer that renders a part of the final image. In a cluster, each [node](#node) is an image generator.
 
 ## Node
-A single instance of the application in a [cluster](#cluster). In general, a node corresponds to a single computer, but multiple nodes can run on the same computer for testing. See [Node](/docs/reference/configuration/node).
+A single instance of the application in a [cluster](#cluster). In general, a node corresponds to a single computer, but multiple nodes can run on the same computer, although this is rarely the most optimal solution outside of testing. See [Node](/docs/reference/configuration/node).
 
 ## Non-linear projection
 A [projection](#projection) whose image cannot be described by a single frustum, such as the fisheye, cylindrical, equirectangular, spherical mirror, or cubemap projections. SGCT renders these by calling the application's `draw` callback once for every face of a [cube map](#cube-map) and reprojecting the result.
 
 ## Projection
-The method that determines how the 3D scene is rendered into a viewport. SGCT supports many different projection types, see [Projections](/docs/reference/configuration/projections).
+The method that determines how the 3D scene is rendered into a viewport. SGCT supports many different projection types, see [Projections](/docs/reference/configuration/projections). The most common type is the planar projection, in which a horizontal and vertical field of view is defined. Another often used type is the fisheye projection, in which multiple render passes are automatically combined to generate a square fisheye or [dome master](#dome-master) image.
 
 ## Server
-The [node](#node) that controls the cluster. It sends the [shared data](#shared-data) to the [clients](#client) and coordinates the [frame lock](#frame-lock). The configuration file and parts of the API use the older term *master* for the server, for example in the `masteraddress` value of the [Cluster](/docs/reference/configuration/cluster) and in `Engine::isMaster`.
+The [node](#node) that controls the cluster. It sends the [shared data](#shared-data) to the [clients](#client) and coordinates the [frame lock](#frame-lock). Even a cluster that only consists of a single node has a server, just without any clients. The configuration file and parts of the API use the older term *master* for the server, for example in the `masteraddress` value of the [Cluster](/docs/reference/configuration/cluster) and in `Engine::isMaster`.
 
 ## Shared data
 The application state that the server sends to all clients every frame so that all nodes render the same scene. See [Shared data](/docs/overview/shared-data).
@@ -69,7 +68,7 @@ A group of NVIDIA graphics cards whose buffer swaps are synchronized in hardware
 The position and orientation from which the scene is viewed, including the [eye separation](#eye-separation). See [User](/docs/reference/configuration/user).
 
 ## Viewport
-A rectangular part of a [window](#window) into which content is rendered with a specific [projection](#projection). See [Viewport](/docs/reference/configuration/viewport).
+A rectangular part of a [window](#window) into which 2D or 3D content is rendered with a specific [projection](#projection). The position and the size of a viewport are described in a 0-1 range relative to the window. See [Viewport](/docs/reference/configuration/viewport).
 
 ## V-Sync
 Synchronizing the buffer swaps of a window with the refresh rate of the display to prevent tearing. See the [`swapinterval`](/docs/reference/configuration/settings#display-swapinterval) setting.
@@ -78,4 +77,4 @@ Synchronizing the buffer swaps of a window with the refresh rate of the display 
 A mesh that distorts the rendering of a viewport so that it appears correct on a curved display surface or when it is projected from an angle. See [Mesh formats](/docs/reference/mesh-formats).
 
 ## Window
-An operating system window that belongs to a [node](#node) and contains one or more [viewports](#viewport). See [Window](/docs/reference/configuration/window).
+An operating system window that belongs to a [node](#node) and contains one or more [viewports](#viewport). The resolution, position, and other parameters of a window can be configured, and the resolution and position are defined in the native units of the operating system, often logical pixels. See [Window](/docs/reference/configuration/window).

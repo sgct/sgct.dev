@@ -24,9 +24,14 @@ This command generates static content into the `build` directory and can be serv
 ```bash
 npm run lint
 npm run validate-configs
+npm run check-reference
 ```
 
-`npm run lint` runs [markdownlint](https://github.com/DavidAnson/markdownlint) with the rules in `.markdownlint.json` over the documentation pages and this README. `npm run validate-configs` validates every JSON file in `docs/` against the `sgct.schema.json` of the SGCT repository, which ensures that the configuration files offered for download can be loaded by SGCT. It fetches the schema from GitHub and accepts the same `SGCT_SOURCE_DIR` and `SGCT_REF` environment variables as the [API generation](#c-api-reference). Both checks run on every build in the `Jenkinsfile`.
+`npm run lint` runs [markdownlint](https://github.com/DavidAnson/markdownlint) with the rules in `.markdownlint.json` over the documentation pages and this README. `npm run validate-configs` validates every JSON file in `docs/` against the `sgct.schema.json` of the SGCT repository, which ensures that the configuration files offered for download can be loaded by SGCT.
+
+`npm run check-reference` compares the `Parameter` tables of the configuration reference with the same schema. It reports parameters that do not exist in the schema, schema properties that are not documented, `optional` badges that disagree with the schema's `required` lists, and types or enumeration values that disagree with the schema. Which page documents which part of the schema is listed in `Pages` at the top of `scripts/check-reference.mjs`, so a new reference page has to be added there. Deliberate differences, where the reference follows SGCT's behavior rather than the schema, are listed with their reason in `KnownDifferences` in the same file.
+
+Both scripts fetch the schema from GitHub and accept the same `SGCT_SOURCE_DIR` and `SGCT_REF` environment variables as the [API generation](#c-api-reference). All three checks run on every build in the `Jenkinsfile`.
 
 ## Writing documentation
 The documentation pages are MDX files in `docs/`, split into the `overview`, `reference`, `building`, and `examples` folders that each have their own sidebar. The sidebars are generated from the folder structure; the order of the pages is set by the `sidebar_position` in the front matter of a page or by a `_category_.json` file in a folder. Links between pages use absolute paths such as `/docs/reference/configuration/window#stereo`.
@@ -93,11 +98,14 @@ SGCT_REF=v2.9.3 npm run generate-api           # document a release
 
 Graphviz is not required: the Doxyfile sets `HAVE_DOT = NO`, so no class or include graphs are generated.
 
-To move to a newer Doxygen, regenerate the template with that release and re-apply the two local changes to it:
+To move to a newer Doxygen, regenerate the template with that release and re-apply the local changes to it:
 
 ```bash
 doxygen -w html doxygen/header.html /dev/null /dev/null
 ```
 
 1. the doxygen-awesome-css `<script>` block at the end of `<head>`
-1. the two `https://sgct.dev/` links wrapped around `#projectlogo` and `#projectname`
+1. the sgct.dev integration `<script>` block after it, which redirects pages opened outside of `/api` into it and makes the light/dark theme follow the site's navbar switch
+1. the two `$relpath^../` links with `target="_top"` wrapped around `#projectlogo` and `#projectname`
+
+Pages of the reference are linked from the documentation as `/api?page=<file>.html`, which opens them inside the site rather than as bare Doxygen output.

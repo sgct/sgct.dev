@@ -5,7 +5,7 @@
  * the Docusaurus site share a palette, and the font stacks mirror Infima's defaults.
  *
  * Variables must be overridden on the same selector that defines them (`html`), and the
- * dark variant on `html.dark-mode`, because the dark-mode toggle extension is installed.
+ * dark variant on `html.dark-mode`, which `header.html` sets to follow the site's theme.
  */
 
 html {

@@ -32,13 +32,64 @@ $mermaidjs
 <link href="$relpath^$stylesheet" rel="stylesheet" type="text/css" />
 $extrastylesheet
 <!-- doxygen-awesome-css extensions; the .js files are supplied via HTML_EXTRA_FILES -->
-<script type="text/javascript" src="$relpath^doxygen-awesome-darkmode-toggle.js"></script>
 <script type="text/javascript" src="$relpath^doxygen-awesome-fragment-copy-button.js"></script>
 <script type="text/javascript" src="$relpath^doxygen-awesome-paragraph-link.js"></script>
 <script type="text/javascript">
-  DoxygenAwesomeDarkModeToggle.init()
   DoxygenAwesomeFragmentCopyButton.init()
   DoxygenAwesomeParagraphLink.init()
+</script>
+<!-- sgct.dev integration -->
+<script type="text/javascript">
+(function() {
+  // These pages are meant to be shown inside the iframe of https://sgct.dev/api, so a page
+  // that is opened directly is sent there instead. Previewing the files from disk still works
+  if (window.top === window && location.protocol !== 'file:') {
+    const page = location.pathname.split('/').pop() + location.hash;
+    location.replace('$relpath^../api?page=' + encodeURIComponent(page));
+    return;
+  }
+
+  // Follow the light/dark switch in the site's navbar rather than having a separate one.
+  // doxygen-awesome-css is styled through the `dark-mode` and `light-mode` classes
+  const root = document.documentElement;
+  const apply = (dark) => {
+    root.classList.toggle('dark-mode', dark);
+    root.classList.toggle('light-mode', !dark);
+  };
+
+  let parentRoot = null;
+  try {
+    parentRoot = window.parent.document.documentElement;
+  }
+  catch (e) {
+    // Framed by a different origin, or opened from disk in a browser that treats every
+    // file as its own origin
+  }
+
+  if (parentRoot && parentRoot !== root) {
+    const sync = () => apply(parentRoot.dataset.theme === 'dark');
+    sync();
+    new MutationObserver(sync).observe(
+      parentRoot,
+      { attributes: true, attributeFilter: ['data-theme'] }
+    );
+  }
+  else {
+    // Use the choice made with the navbar switch, which Docusaurus keeps in `theme`
+    let stored = null;
+    try {
+      stored = localStorage.getItem('theme');
+    }
+    catch (e) {
+      // Storage is unavailable, for example when blocked or for files opened from disk
+    }
+    apply(
+      stored === 'dark' || stored === 'light' ?
+        stored === 'dark' :
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+    );
+  }
+})();
 </script>
 </head>
 <body>
@@ -54,11 +105,11 @@ $extrastylesheet
  <tbody>
  <tr id="projectrow">
   <!--BEGIN PROJECT_LOGO-->
-  <td id="projectlogo"><a href="https://sgct.dev/" title="Back to sgct.dev"><img alt="Logo" src="$relpath^$projectlogo"$logosize/></a></td>
+  <td id="projectlogo"><a href="$relpath^../" target="_top" title="Back to sgct.dev"><img alt="Logo" src="$relpath^$projectlogo"$logosize/></a></td>
   <!--END PROJECT_LOGO-->
   <!--BEGIN PROJECT_NAME-->
   <td id="projectalign">
-   <div id="projectname"><a href="https://sgct.dev/" title="Back to sgct.dev">$projectname</a><!--BEGIN PROJECT_NUMBER--><span id="projectnumber">&#160;$projectnumber</span><!--END PROJECT_NUMBER-->
+   <div id="projectname"><a href="$relpath^../" target="_top" title="Back to sgct.dev">$projectname</a><!--BEGIN PROJECT_NUMBER--><span id="projectnumber">&#160;$projectnumber</span><!--END PROJECT_NUMBER-->
    </div>
    <!--BEGIN PROJECT_BRIEF--><div id="projectbrief">$projectbrief</div><!--END PROJECT_BRIEF-->
   </td>

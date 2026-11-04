@@ -4,7 +4,7 @@ import fisheyeJson from './fisheye.json?raw';
 import fisheyeImage from './fisheye.webp';
 
 # Fisheye Projection
-Describes a fisheye projection that is used to render into its parent Viewport. By default, a fisheye rendering is covering 180 degrees field of view and has a 1:1 aspect ratio, though these parameters can be changed with the values provided in this object. This projection type counts as a [non-linear projection](/docs/overview/glossary#non-linear-projection), which requires 4-6 render passes of the application, meaning that the application might render slower when using these kinds of projections than a flat projection. In either case, the application does not need to be aware of the projection as this abstraction is handled internally and the application's `draw` callback is only called multiple times per frame with different projection methods that are used to create the full fisheye projection.
+Describes a fisheye projection that is used to render into its parent Viewport. By default, a fisheye rendering is covering 180 degrees field of view and has a 1:1 aspect ratio, though these parameters can be changed with the values provided in this object. This projection type counts as a [non-linear projection](/docs/glossary#non-linear-projection), which requires 4-6 render passes of the application, meaning that the application might render slower when using these kinds of projections than a flat projection. In either case, the application does not need to be aware of the projection as this abstraction is handled internally and the application's `draw` callback is only called multiple times per frame with different projection methods that are used to create the full fisheye projection.
 
 ## Parameters
 <Parameter name="type" type="string">

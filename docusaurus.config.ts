@@ -86,6 +86,12 @@ const config: Config = {
           label: 'Overview',
         },
         {
+          type: 'doc',
+          position: 'left',
+          docId: 'glossary',
+          label: 'Glossary',
+        },
+        {
           type: 'docSidebar',
           position: 'left',
           sidebarId: 'referenceSidebar',
