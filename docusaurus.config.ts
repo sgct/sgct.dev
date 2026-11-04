@@ -32,7 +32,6 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/SGCT/sgct.dev/',
           beforeDefaultRemarkPlugins: [codeImport],
         },
         theme: {
@@ -104,7 +103,18 @@ const config: Config = {
           position: 'left',
           sidebarId: 'examplesSidebar',
           label: 'Examples'
-        }
+        },
+        {
+          to: '/api',
+          position: 'left',
+          label: 'API'
+        },
+        {
+          href: 'https://github.com/sgct/sgct.dev',
+          position: 'right',
+          className: 'navbar-github-link',
+          'aria-label': 'SGCT GitHub repository',
+        },
       ],
     },
     footer: {

@@ -9,7 +9,7 @@ interface Props {
   name: string;
   alias?: string;
   value?: ReactNode;
-  defaultValue?: ReactNode;
+  default?: ReactNode;
   documentation?: ReactNode;
   id?: string;
   children?: ReactNode;
@@ -19,7 +19,7 @@ export default ({
   name,
   alias,
   value,
-  defaultValue,
+  default: defaultValue,
   documentation,
   id,
   children

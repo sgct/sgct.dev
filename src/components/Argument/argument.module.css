@@ -1,9 +1,6 @@
 /**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- *
- * These styles deliberately mirror parameter.module.css so that a commandline
- * argument and a configuration parameter read as the same kind of block.
+ * These styles deliberately mirror parameter.module.css so that a commandline argument
+ * and a configuration parameter read as the same kind of block.
  */
 
 .argument {

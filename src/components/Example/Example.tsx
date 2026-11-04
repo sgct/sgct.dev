@@ -29,18 +29,18 @@ export default ({
   children
 }: Props) => {
   const [tab, setTab] = useState<Tab>(defaultTab);
-  // React puts punctuation in generated ids; strip it so the ids stay usable in
-  // selectors as well as in the aria-controls / aria-labelledby wiring below.
+  // React puts punctuation in generated ids; strip it so the ids stay usable in selectors
+  // as well as in the aria-controls / aria-labelledby wiring below
   const id = useId().replace(/[^a-zA-Z0-9-]/g, '');
 
-  // The configuration is downloaded straight from the text we already hold, which
-  // keeps the bytes identical to the file on disk without emitting a second asset.
+  // The configuration is downloaded straight from the text we already hold, which keeps
+  // the bytes identical to the file on disk without emitting a second asset
   const href = useMemo(
     () => `data:application/json;charset=utf-8,${encodeURIComponent(json)}`,
     [json]
   );
 
-  // A tablist is expected to move between its tabs with the arrow keys.
+  // A tablist is expected to move between its tabs with the arrow keys
   const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
     if (offset === 0) {
@@ -74,7 +74,7 @@ export default ({
           ))}
         </div>
         {/* The download belongs to the configuration, so it shows with it. Keeping the
-            link in the layout while hidden stops the toolbar jumping between tabs. */}
+            link in the layout while hidden stops the toolbar jumping between tabs */}
         <a
           className={clsx(styles.download, tab !== 'json' && styles.concealed)}
           href={href}
@@ -92,7 +92,7 @@ export default ({
         hidden={tab !== 'image'}
         className={styles.panel}>
         {/* These renderings run to several megabytes, so the page gets a scaled copy
-            and a click opens the original. */}
+            and a click opens the original */}
         <a href={image} target="_blank" rel="noreferrer" className={styles.imageLink}>
           <img
             src={image}

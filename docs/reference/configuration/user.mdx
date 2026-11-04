@@ -13,8 +13,8 @@ Specifies the name of this user. Each user needs to have a unique name, but ther
 Determines the eye separation used for stereoscopic viewports. If no viewports in the configuration are using stereo, this setting is ignored.
 </Parameter>
 
-<Parameter name="pos" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional>
-A linear offset of the user position. Must define three float attributes `x`, `y`, and `z`. The default values are `x=0`, `y=0`, `z=0`, meaning that no linear offset is applied to the user's position.
+<Parameter name="pos" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional default="0,0,0">
+A linear offset of the user position. Must define three float attributes `x`, `y`, and `z`.
 </Parameter>
 
 <Parameter name="matrix" type={<Link to="/docs/reference/configuration/basetypes#mat4">mat4</Link>} optional>

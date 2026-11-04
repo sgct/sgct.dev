@@ -15,7 +15,7 @@ interface Props {
   name: string;
   type?: ReactNode;
   optional?: boolean;
-  defaultValue?: ReactNode;
+  default?: ReactNode;
   documentation?: ReactNode;
   id?: string;
   children?: ReactNode;
@@ -25,7 +25,7 @@ export default ({
   name,
   type,
   optional,
-  defaultValue,
+  default: defaultValue,
   documentation,
   id,
   children

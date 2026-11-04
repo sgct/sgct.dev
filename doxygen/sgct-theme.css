@@ -29,8 +29,8 @@ html.dark-mode {
 }
 
 /*
- * The logo and project name in the sidebar head link back to sgct.dev; keep them
- * looking like the heading they replace rather than like body links.
+ * The logo and project name in the sidebar head link back to sgct.dev; keep them looking
+ * like the heading they replace rather than like body links.
  */
 #projectname a,
 #projectlogo a {

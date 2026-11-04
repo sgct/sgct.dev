@@ -4,9 +4,9 @@ import TabItem from '@theme/TabItem';
 # Building SGCT from source
 The requirements for building SGCT are:
 
-- CMake version 4.0 or above
-- C++ compiler supporting C++23 (Visual Studio 2016 18, GCC 15, or Clang 21)
-- vcpkg installation
+  - CMake version 4.0 or above
+  - C++ compiler supporting C++23 (Visual Studio 2016 18, GCC 15, or Clang 21)
+  - vcpkg installation
 
 CMake can be downloaded and installed from a package manager (`winget`, `apt`, `yum`, etc) or from the [CMake homepage](https://cmake.org/).
 
@@ -25,6 +25,8 @@ SGCT uses [vcpkg](https://github.com/microsoft/vcpkg) for dependency management.
   <TabItem value="cli" label="Commandline">
     1. Clone the SGCT repository (`git clone https://github.com/sgct/sgct`)
     1. Pick an existing preset (`cmake --list-presets`)
-    1. Build with preset `cmake --build --preset <preset>`
+    1. Configure with preset (`cmake --preset <preset>`)
+    1. Pick a build preset (`cmake --build --list-presets`)
+    1. Build with preset (`cmake --build --preset <preset>`)
   </TabItem>
 </Tabs>

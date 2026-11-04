@@ -1,8 +1,3 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
 .parameter {
   border-left: 3px solid var(--ifm-color-primary);
   margin: 1.75rem 0;

@@ -10,15 +10,15 @@ The IP address or the DNS name of the node. If the address is a DNS name, the na
 </Parameter>
 
 <Parameter name="port" type="integer">
-The port at which this node is available at to the server. Please note that operating systems have restricted behavior when trying to open ports lower than a fixed limit. For example, Unix does not allow non-elevated users to open ports \< 1024. As a convention, SGCT usually uses ports starting at 20400, but this is an arbitrary convention without a specific reason.
+The port at which this node is available at to the server. Please note that operating systems have restricted behavior when trying to open ports lower than a fixed limit. For example, Unix does not allow non-elevated users to open ports \< 1024. As a convention, SGCT usually uses ports starting at 20400.
 </Parameter>
 
 <Parameter name="datatransferport" type="integer" optional>
-If this value is set, a socket connection is opened at the provided port that can be used by the application to transmit data between the server and the clients using the `dataTransfer*` callbacks and `transferData` function of the `NetworkManager`. If no value is specified this function will not work and the callbacks will never be called. Please note that operating systems have restricted behavior when trying to open ports lower than a fixed limit. For example, Unix does not allow non-priviledged users to open ports \< 1024.
+If this value is set, a socket connection is opened at the provided port that can be used by the application to transmit data between the server and the clients. If no value is specified these data transfer functions will not work. Please note that operating systems have restricted behavior when trying to open ports lower than a fixed limit. For example, Unix does not allow non-priviledged users to open ports \< 1024.
 </Parameter>
 
-<Parameter name="swaplock" type="boolean" optional>
-Determines whether this node should be part of an Nvidia swap group and should use the swap barrier. Please note that this feature only works on Windows and requires Nvidia Quadro cards + G-Sync synchronization cards. For more information on swap groups, see https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/quadro-product-literature/Quadro_GSync_install_guide_v4.pdf. The default value is false.
+<Parameter name="swaplock" type="boolean" optional default="false">
+Determines whether this node should be part of an Nvidia swap group and should use the swap barrier. Please note that this feature only works on Windows and requires Nvidia Quadro cards + G-Sync synchronization cards. For more information on swap groups, see https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/quadro-product-literature/Quadro_GSync_install_guide_v4.pdf.
 </Parameter>
 
 <Parameter name="windows" type={<><Link to="/docs/reference/configuration/window">Window</Link>[]</>} optional>

@@ -1,27 +1,18 @@
 # C++ API reference
-The complete reference for every class, function, and enumeration that SGCT exposes is generated
-directly from the comments in the `include/sgct` headers:
+The complete reference for every class, function, and enumeration that SGCT exposes is generated directly from the comments in the `include/sgct` headers:
 
 **[Browse the C++ API reference](pathname:///api/index.html)**
 
-It is regenerated from the SGCT sources every time this site is deployed, and the revision it was
-built from is shown next to the SGCT name in its sidebar. This page is only a map of what you will
-find there.
+It is regenerated from the SGCT sources every time this site is deployed, and the revision it was built from is shown next to the SGCT name in its sidebar. This page is only a map of what you will find there.
 
 ## Namespaces
 Everything lives under the `sgct` namespace, with a handful of nested namespaces for the parts that
 are only interesting in specific situations:
 
-- [`sgct`](pathname:///api/namespacesgct.html) contains the classes an application interacts with,
-  along with free functions such as `loadCluster`, `parseArguments`, and `time`
-- [`sgct::config`](pathname:///api/namespacesgct_1_1config.html) is a direct mirror of the JSON
-  configuration file; every struct in it corresponds to an object described in the
-  [Configuration](/docs/reference/configuration/) section
-- [`sgct::correction`](pathname:///api/namespacesgct_1_1correction.html) holds the readers for the
-  supported warping mesh formats, which are listed under the `mesh` attribute of a
-  [viewport](/docs/reference/configuration/viewport)
-- [`sgct::text`](pathname:///api/namespacesgct_1_1text.html) contains the font handling used to
-  draw text overlays
+  - [`sgct`](pathname:///api/namespacesgct.html) contains the classes an application interacts with, along with free functions such as `loadCluster`, `parseArguments`, and `time`
+  - [`sgct::config`](pathname:///api/namespacesgct_1_1config.html) is a direct mirror of the JSON configuration file; every struct in it corresponds to an object described in the [Configuration](/docs/reference/configuration/) section
+  - [`sgct::correction`](pathname:///api/namespacesgct_1_1correction.html) holds the readers for the supported warping mesh formats, which are listed under the `mesh` attribute of a [viewport](/docs/reference/configuration/viewport)
+  - [`sgct::text`](pathname:///api/namespacesgct_1_1text.html) contains the font handling used to draw text overlays
 
 ## Where to start
 A single umbrella header pulls in everything an application normally needs:
@@ -32,31 +23,12 @@ A single umbrella header pulls in everything an application normally needs:
 
 From there, the types that matter for a first application are:
 
-- [`Engine`](pathname:///api/classsgct_1_1_engine.html) is the central object. It is created once
-  through `Engine::create`, owns the frameloop started by `Engine::instance().render()`, and
-  dispatches to the callbacks your application provides. The
-  [First application](/docs/building/getting-started) example uses nothing else
-- [`Engine::Callbacks`](pathname:///api/structsgct_1_1_engine_1_1_callbacks.html) is the struct of
-  `std::function` members that you fill in to hook into the frameloop. The order in which they are
-  called is laid out in [How it works](/docs/overview/how-it-works)
-- [`RenderData`](pathname:///api/structsgct_1_1_render_data.html) is handed to the draw callbacks
-  and carries the window, viewport, and matrices for the pass currently being rendered
-- [`Log`](pathname:///api/classsgct_1_1_log.html) is the logging facility that SGCT itself uses,
-  and that applications are encouraged to use so that messages from all nodes end up in one place
+  - [`Engine`](pathname:///api/classsgct_1_1_engine.html) is the central object. It is created once through `Engine::create`, owns the frameloop started by `Engine::instance().render()`, and dispatches to the callbacks your application provides. The [First application](/docs/building/getting-started) example uses nothing else
+  - [`Engine::Callbacks`](pathname:///api/structsgct_1_1_engine_1_1_callbacks.html) is the struct of `std::function` members that you fill in to hook into the frameloop. The order in which they are called is laid out in [How it works](/docs/overview/how-it-works)
+  - [`RenderData`](pathname:///api/structsgct_1_1_render_data.html) is handed to the draw callbacks and carries the window, viewport, and matrices for the pass currently being rendered
+  - [`Log`](pathname:///api/classsgct_1_1_log.html) is the logging facility that SGCT itself uses, and that applications are encouraged to use so that messages from all nodes end up in one place
 
-Once an application grows beyond a single window, the objects behind the configuration file become
-relevant: [`Node`](pathname:///api/classsgct_1_1_node.html),
-[`Window`](pathname:///api/classsgct_1_1_window.html),
-[`Viewport`](pathname:///api/classsgct_1_1_viewport.html), and the
-[`NonLinearProjection`](pathname:///api/classsgct_1_1_non_linear_projection.html) hierarchy that
-implements fisheye, cylindrical, equirectangular, spherical mirror, and cubemap rendering. Applications that need to
-keep state synchronized between the nodes of a cluster do so through
-[`SharedData`](pathname:///api/classsgct_1_1_shared_data.html).
+Once an application grows beyond a single window, the objects behind the configuration file become relevant: [`Node`](pathname:///api/classsgct_1_1_node.html), [`Window`](pathname:///api/classsgct_1_1_window.html), [`Viewport`](pathname:///api/classsgct_1_1_viewport.html), and the [`NonLinearProjection`](pathname:///api/classsgct_1_1_non_linear_projection.html) hierarchy that implements fisheye, cylindrical, equirectangular, spherical mirror, and cubemap rendering. Applications that need to keep state synchronized between the nodes of a cluster do so through [`SharedData`](pathname:///api/classsgct_1_1_shared_data.html).
 
 ## Configuration objects
-The structs in `sgct::config` are worth calling out separately, because they are the same objects
-that the [Configuration](/docs/reference/configuration/) section documents from the JSON side. The
-reference describes what each field means to a person writing a configuration file; the C++ API
-reference describes the types, defaults, and nesting as the compiler sees them. `loadCluster`
-returns a [`config::Cluster`](pathname:///api/structsgct_1_1config_1_1_cluster.html), so an
-application can also construct or amend that object in code instead of reading it from a file.
+The structs in `sgct::config` are worth calling out separately, because they are the same objects that the [Configuration](/docs/reference/configuration/) section documents from the JSON side. The reference describes what each field means to a person writing a configuration file; the C++ API reference describes the types, defaults, and nesting as the compiler sees them. `loadCluster` returns a [`config::Cluster`](pathname:///api/structsgct_1_1config_1_1_cluster.html), so an application can also construct or amend that object in code instead of reading it from a file.

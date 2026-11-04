@@ -5,15 +5,23 @@ import Link from '@docusaurus/Link';
 Describes a projection for the Viewport that is a flat projection described by simple frustum, which may be asymmetric.
 
 ## Parameters
-<Parameter name="type" type="string" defaultValue="TextureMappedProjection">
-Defines the type of this projection.
+<Parameter name="type" type="string">
+Defines the type of this projection. To use the Texture-Mapped Projection, this value has to be `TextureMappedProjection`.
 </Parameter>
 
-<Parameter name="fov" type={<Link to="/docs/reference/configuration/basetypes#fov">FOV</Link>}>
-This element describes the field of view used the camera in this planar projection.
+<Parameter name="fov">
+This element describes the field of view used by the camera in this planar projection. The field of view can be specified in one of two ways: either symmetrically through `hfov` and `vfov`, or asymmetrically through `left`, `right`, `down`, and `up`.
+
+  <Parameter name="hfov" type="number" optional>The angle (in degrees) covered by the camera in the horizontal direction. This is a symmetric frustum around the center and provides the same result as providing the `left` and `right` values with the half-angle. Must be used together with `vfov`.</Parameter>
+  <Parameter name="vfov" type="number" optional>The angle (in degrees) covered by the camera in the vertical direction. This is a symmetric frustum around the center and provides the same result as providing the `up` and `down` values with the half-angle. Must be used together with `hfov`.</Parameter>
+
+  <Parameter name="left" type="number" optional>The angle (in degrees) that is covered by the camera between the central point and the left border of the viewport. The `left` and `right` angles added together are the horizontal field of view of the viewport.</Parameter>
+  <Parameter name="right" type="number" optional>The angle (in degrees) that is covered by the camera between the central point and the right border of the viewport. The `left` and `right` angles added together are the horizontal field of view of the viewport.</Parameter>
+  <Parameter name="down" type="number" optional>The angle (in degrees) that is covered by the camera between the central point and the bottom border of the viewport. The `down` and `up` angles added together are the vertical field of view of the viewport.</Parameter>
+  <Parameter name="up" type="number" optional>The angle (in degrees) that is covered by the camera between the central point and the top border of the viewport. The `down` and `up` angles added together are the vertical field of view of the viewport.</Parameter>
 </Parameter>
 
-<Parameter name="distance" type="number" optional>
+<Parameter name="distance" type="number" optional default="10.0">
 The distance (in meters) at which the virtual render plane is placed. This value is only important when rendering this viewport using stereoscopy as the distance and the Users eyeSeparation are used to compute the change in frustum between the left and the right eyes.
 </Parameter>
 
@@ -21,6 +29,6 @@ The distance (in meters) at which the virtual render plane is placed. This value
 Describes a fixed orientation for the virtual image plane. This can be provided either as Euler angles or as a quaternion.
 </Parameter>
 
-<Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional>
-A linear offset in meters that is added to the virtual image plane. Must define three float attributes x, y, and z. The default values are x=0, y=0, z=0, meaning that no offset is applied to the image plane.
+<Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional default="0,0,0">
+A linear offset in meters that is added to the virtual image plane. Must define three float attributes x, y, and z.
 </Parameter>

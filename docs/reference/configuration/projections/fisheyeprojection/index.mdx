@@ -7,66 +7,50 @@ import fisheyeImage from './fisheye.webp';
 Describes a fisheye projection that is used to render into its parent Viewport. By default, a fisheye rendering is covering 180 degrees field of view and has a 1:1 aspect ratio, though these parameters can be changed with the attributes provided in this node. This projection type counts as a non-linear projection, which requires 4-6 render passes of the application, meaning that the application might render slower when using these kind of projections than a flat projection. In either case, the application does not need to be aware of the projection as this abstract is handled internally and the applications draw method is only called multiple times per frame with different projection methods that are used to create the full fisheye projection.
 
 ## Parameters
-
-<Parameter name="type" type="string" defaultValue="FisheyeProjection">
-Defines the type of this projection.
+<Parameter name="type" type="string">
+Defines the type of this projection. To use the Fisheye Projection, this value has to be `FisheyeProjection`.
 </Parameter>
 
-<Parameter name="fov" type="number" optional>
-Describes the field of view that is covered by the fisheye projection in degrees. The resulting image will always be a circle, and this value determines how much of a field of view is covered by this circle. Please note specifically that this also includes field-of-view settings >180, in which a larger distortion is applied to the image. The default value is 180.
+<Parameter name="fov" type="number" optional default="180">
+Describes the field of view that is covered by the fisheye projection in degrees. The resulting image will always be a circle, and this value determines how much of a field of view is covered by this circle. Please note specifically that this also includes field-of-view settings >180, in which a larger distortion is applied to the image.
 </Parameter>
 
-<Parameter name="quality" type={<Link to="/docs/reference/configuration/basetypes#quality">Quality</Link>} optional>
-Determines the pixel resolution of the cube map faces that are individually rendered to create the fisheye rendering. The higher resolution these cube map faces have, the better quality the resulting cylindrical rendering, but this comes at the expense of increased rendering times. The named values are corresponding:
-
-- `low`: 256
-- `medium`: 512 (the default)
-- `high`: 1024
-- `1k`: 1024
-- `1.5k`: 1536
-- `2k`: 2048
-- `4k`: 4096
-- `8k`: 8192
-- `16k`: 16384
-
-Allowed values: `low`, `256`, `medium`, `512`, `high`, `1k`, `1024`, `1.5k`, `1536`, `2k`, `2048`, `4k`, `4096`, `8k`, `8192`, `16k`, `16384`, `32k`, `32768`, `64k`, `65536`
+<Parameter name="quality" type={<Link to="/docs/reference/configuration/basetypes#quality">Quality</Link>} optional default="512">
+Determines the pixel resolution of the cube map faces that are individually rendered to create the fisheye rendering.
 </Parameter>
 
-<Parameter name="interpolation" type="string" optional>
-Determines the texture interpolation method that is used by SGCT when reprojecting the cube maps into the final fisheye rendering. The default value is `"linear"`.
-
-Allowed values: `linear`, `cubic`
+<Parameter name="interpolation" type="linear or cubic" optional default="linear">
+Determines the texture interpolation method that is used by SGCT when reprojecting the cube maps into the final fisheye rendering.
 </Parameter>
 
-<Parameter name="tilt" type="number" optional>
-Determines the tilt of the "up vector" of the fisheye. With a tilt of `0`, the center of the fisheye image is the apex of the half-sphere that is used to reproject the cube map. A tilted fisheye rendering is useful when projecting on a tilted planetarium dome. A value of `90`, for example, would result in the forward facing direction being at the center of the fisheye circular image. The default value is `0`.
+<Parameter name="orientation" type={<Link to="/docs/reference/configuration/basetypes#orientation">Orientation</Link>} optional>
+Provides the ability to orient the fisheye. If this parameter is not specified, the center of the fisheye image is the apex of the half-sphere that is used to reproject the cube map.
 </Parameter>
 
-<Parameter name="diameter" type="number" optional>
-Sets the diameter in meters for the "sphere" that the fisheye is reprojected based on. This value is only used for stereoscopic rendering to compute the frustum offset using the Users `eyeseparation`. The default value is `14.8`.
+<Parameter name="diameter" type="number" optional default="14.8">
+Sets the diameter in meters for the "sphere" that the fisheye is reprojected based on. This value is only used for stereoscopic rendering to compute the frustum offset using the Users `eyeseparation`.
 </Parameter>
 
 <Parameter name="crop" type="Object" optional>
   This node can be used to crop the fisheye after the post processing has been performed. This might be useful for domes running a single projector with a fisheye lens. Normally a projector has a 16:9, 16:10, or 4:3 aspect ratio, but the fiehye output has a 1:1 aspect ratio. This circle can be squared by cropping the 1:1 aspect ratio fisheye image down to the aspect ratio of the projector that is used. By default, no cropping is applied to the image, leaving it in a 1:1 aspect ratio.
 
-  <Parameter name="left" type="number">The ratio of the image that is cropped from the left. If the value is `0`, the image is not cropped at all from this side, if it is `1`, the entire image is cropped. However, this cropping value must not be larger than the `1 - right` cropping value as these value might not overlap. The default value is `0`.</Parameter>
-  <Parameter name="right" type="number">The ratio of the image that is cropped from the right. If the value is `0`, the image is not cropped at all from this side, if it is `1`, the entire image is cropped. However, this cropping value must not be larger than the `1 - left` cropping value as these value might not overlap. The default value is `0`.</Parameter>
-  <Parameter name="bottom" type="number">The ratio of the image that is cropped from the bottom. If the value is `0,` the image is not cropped at all from this side, if it is `1`, the entire image is cropped. However, this cropping value must not be larger than the `1 - top` cropping value as these value might not overlap. The default value is `0`.</Parameter>
-  <Parameter name="top" type="number">The ratio of the image that is cropped from the top. If the value is `0`, the image is not cropped at all from this side, if it is `1`, the entire image is cropped. However, this cropping value must not be larger than the `1 - bottom` cropping value as these value might not overlap. The default value is `0`.</Parameter>
+  <Parameter name="left" type="number" default="0">The ratio of the image that is cropped from the left. If the value is `0`, the image is not cropped at all from this side, if it is `1`, the entire image is cropped. However, this cropping value must not be larger than the `1 - right` cropping value as these value might not overlap.</Parameter>
+  <Parameter name="right" type="number" default="0">The ratio of the image that is cropped from the right. If the value is `0`, the image is not cropped at all from this side, if it is `1`, the entire image is cropped. However, this cropping value must not be larger than the `1 - left` cropping value as these value might not overlap.</Parameter>
+  <Parameter name="bottom" type="number" default="0">The ratio of the image that is cropped from the bottom. If the value is `0,` the image is not cropped at all from this side, if it is `1`, the entire image is cropped. However, this cropping value must not be larger than the `1 - top` cropping value as these value might not overlap.</Parameter>
+  <Parameter name="top" type="number" default="0">The ratio of the image that is cropped from the top. If the value is `0`, the image is not cropped at all from this side, if it is `1`, the entire image is cropped. However, this cropping value must not be larger than the `1 - bottom` cropping value as these value might not overlap.</Parameter>
 </Parameter>
 
-<Parameter name="keepaspectratio" type="boolean" optional>
-Determines whether the application should try to maintain the original aspect ratio when resizing the window or whether the field of view should be recalculated based on the window's new aspect ratio. The default value is `true`.
+<Parameter name="keepaspectratio" type="boolean" optional default="true">
+Determines whether the application should try to maintain the original aspect ratio when resizing the window or whether the field of view should be recalculated based on the window's new aspect ratio.
 </Parameter>
 
-<Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional>
-A linear offset in meters that is added to the virtual planes used to project the fisheye rendering. This can be used for off-axis projections. Must define three float attributes `x`, `y`, and `z`. The default values are `x=0`, `y=0`, `z=0`, meaning that no offset is applied to the center of the fisheye sphere.
+<Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional default="0,0,0">
+A linear offset in meters that is added to the virtual planes used to project the fisheye rendering. This can be used for off-axis projections. Must define three float attributes `x`, `y`, and `z`.
 </Parameter>
 
-<Parameter name="background" type={<Link to="/docs/reference/configuration/basetypes#color">color</Link>} optional>
-This value determines the color that is used for the parts of the image that are not covered by the spherical fisheye image. The alpha component of this color has to be provided even if the final render target does not contain an alpha channel, in which case the alpha value is ignored. The default color is a dark gray `(0.3, 0.3, 0.3, 1.0)`.
+<Parameter name="background" type={<Link to="/docs/reference/configuration/basetypes#color">color</Link>} optional default="0.3, 0.3, 0.3, 1.0">
+This value determines the color that is used for the parts of the image that are not covered by the spherical fisheye image. The alpha component of this color has to be provided even if the final render target does not contain an alpha channel, in which case the alpha value is ignored.
 </Parameter>
 
 ## Examples
-
 <Example json={fisheyeJson} file="fisheye.json" image={fisheyeImage} />

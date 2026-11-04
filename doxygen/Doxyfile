@@ -12,7 +12,7 @@ PROJECT_LOGO           = $(DOXYGEN_LOGO)
 PROJECT_ICON           = $(DOXYGEN_LOGO)
 
 OUTPUT_DIRECTORY       = $(DOXYGEN_OUTPUT)
-HTML_OUTPUT            = api
+HTML_OUTPUT            = api-html
 
 #---------------------------------------------------------------------------
 # Input
@@ -80,7 +80,7 @@ WARN_LOGFILE           = $(DOXYGEN_WARN_LOGFILE)
 #---------------------------------------------------------------------------
 GENERATE_LATEX         = NO
 SEARCHENGINE           = YES
-HAVE_DOT               = YES
+HAVE_DOT               = NO
 
 #---------------------------------------------------------------------------
 # doxygen-awesome-css

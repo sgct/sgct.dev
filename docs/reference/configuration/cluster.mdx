@@ -2,13 +2,11 @@ import Parameter from '/src/components/Parameter/Parameter';
 import Link from '@docusaurus/Link';
 
 # Cluster
-
 The `Cluster` is the root object of every configuration file. It describes the entire cluster.
 
 ## Parameters
-
 <Parameter name="version" type="integer">
-The version of this configuration file. The current version number is `1`.
+The version of this configuration file. This documentation is written against version `2` of the configuration file.
 </Parameter>
 
 <Parameter name="masteraddress" type="string">
@@ -23,33 +21,20 @@ Each object in this array has to be a valid [Node](node). At least one of the de
 Each object in this array has to be a valid [User](user). The first value in the array is considered to be the default user for the application.
 </Parameter>
 
-<Parameter name="debuglog" type="boolean" optional defaultValue="false">
+<Parameter name="debuglog" type="boolean" optional default="false">
 Determines whether the logging should include `Debug` level log messages. By default only `Info` level log messages or above are added to the console, the file, or the registered callback. Log messages that are not logged are discarded.
 </Parameter>
 
-<Parameter name="firmsync" type="boolean" optional defaultValue="false">
+<Parameter name="firmsync" type="boolean" optional default="false">
 Determines whether the server should frame lock and wait for all client nodes or not. It is also possible, and more advisable, to set the frame locking on an individual [Node](node) basis for the cases where not all nodes are part of a swap group.
 </Parameter>
 
-<Parameter name="threadaffinity" type="integer" optional>
-Forces the thread affinity for the main thread of the application. On Windows this is achieved using the `SetThreadAffinityMask` function, but it might not be implemented on other operating systems. By default no thread affinity is set for the application.
+<Parameter name="threadaffinity" type="integer" optional default="none">
+Forces the thread affinity for the main thread of the application. On Windows this is achieved using the `SetThreadAffinityMask` function, but it might not be implemented on other operating systems.
 </Parameter>
 
-<Parameter name="scene" type="Object" optional>
-  Determines an overall orientation of the scene. All of its values are included in the projection matrix that is passed to the rendering function of the application.
-
-  <Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes">vec3</Link>} optional defaultValue="0, 0, 0">
-  A linear offset of the scene center.
-  </Parameter>
-
-  <Parameter name="orientation" type="Object" optional>
-  Describes a fixed orientation of the global scene.
-  </Parameter>
-
-  <Parameter name="scale" type="number" optional defaultValue="1.0">
-  A scaling factor for the entire scene.
-  </Parameter>
-
+<Parameter name="scene" type={<Link to="/docs/reference/configuration/scene">Scene</Link>} optional>
+Determines an overall orientation of the scene. All of its values are included in the projection matrix that is passed to the rendering function of the application.
 </Parameter>
 
 <Parameter name="capture" type={<Link to="/docs/reference/configuration/capture">Capture</Link>} optional>
@@ -65,7 +50,7 @@ Each object in this array describes a VRPN tracker.
 </Parameter>
 
 <Parameter name="generator" type="Object" optional>
-  Information about the generator application that was used to create this configuration file.
+  Information about the generator application that was used to create the configuration file.
 
   <Parameter name="name" type="string">A human-friendly name for the generator that created this configuration file.</Parameter>
 
