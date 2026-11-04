@@ -6,71 +6,162 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Getting started
-## CMake
-In order to use SGCT, it has to be included in the `CMakeLists.txt` of your project. This can be done either by including SGCT as a submodule in your project or by using the vcpkg port:
+This page walks through creating a small SGCT application, building it with CMake, and running it first on a single computer and then as a cluster of several nodes.
+
+## Adding SGCT to a CMake project
+SGCT can be added to a project either through its vcpkg port or by including the SGCT repository as a submodule:
 
 <Tabs>
   <TabItem value="vcpkg" label="vcpkg" default>
-    ```cmake
-    find_package(sgct CONFIG REQUIRED)
-    target_link_libraries(OpenSpace PRIVATE sgct::sgct)
-    ```
+
+SGCT is not part of the public vcpkg registry, so the port in the SGCT repository has to be registered as an overlay port in your project's `vcpkg-configuration.json`, as described in [Building SGCT from source](/docs/building/building-from-source#using-sgct-in-your-project), and `sgct` has to be listed as a dependency in your project's `vcpkg.json`:
+
+```json
+{
+  "dependencies": [ "sgct" ]
+}
+```
+
+In the `CMakeLists.txt`, SGCT is then found and linked like any other vcpkg package:
+
+```cmake
+find_package(sgct CONFIG REQUIRED)
+target_link_libraries(<your application> PRIVATE sgct::sgct)
+```
+
   </TabItem>
   <TabItem value="submodule" label="Submodule">
-    ```cmake
-    add_subdirectory(<path to sgct>)
-    target_link_libraries(<your application> PUBLIC sgct::sgct)
-    ```
+
+```cmake
+add_subdirectory(<path to sgct>)
+target_link_libraries(<your application> PRIVATE sgct::sgct)
+```
+
+SGCT's own dependencies are still resolved through vcpkg, so your project has to be configured with the vcpkg toolchain file and your `vcpkg.json` has to contain the dependencies listed in SGCT's `vcpkg.json`.
+
   </TabItem>
 </Tabs>
 
-In that case, SGCT will automatically be included in your project file when generating it.
+## A first application
+The following application renders a background that slowly pulses between black and white. The brightness is computed from the time on the server and sent to all clients every frame, which is the smallest example of the [shared data](/docs/overview/shared-data) mechanism that keeps the nodes of a cluster in lockstep. SGCT only supports modern OpenGL (version 4.6), which means that the legacy fixed-function pipeline will *not* work.
 
+```cpp title="main.cpp"
+#include <sgct/sgct.h>
+#include <sgct/opengl.h>
+#include <cmath>
 
-## Commandline argument
-You can find the available commandline arguments by either looking at the `commandline.cpp` file's `helpMessage()` function, or by executing your application with the commandline argument `--help`, which will print that message and immediately terminate the application. The most important setting that might be useful for the user is the `--config` parameter which accepts a single argument that is the path to an JSON configuration file that is loaded and applied at application startup. The file format of the configuration files are described in greater detail in the [Reference](/docs/reference/configuration/) section. If no configuration file is provided, SGCT will create a "cluster" consisting of a single node with a single 1280x720 window.
+using namespace sgct;
 
-When running multiple instances of the application on the same machine (if your configuration file is configured to support that), you will also need the `--local n` and `--client` parameters. As the automatic IP detection cannot determine which of the nodes to use, the `--local n` parameter has to be used to distinguish the nodes, starting with the number 0, using `--local 0` for the node identified by the IP address `127.0.0.1`, `--local 1` for the address `127.0.0.2` and so forth. Each node that is *not* the server also needs to be started with the `-client` parameter or it will think it is the server and not try to connect to the actual server node. [Commandline arguments](/docs/reference/commandline) contains more detailed information about the available commandline arguments that can be passed to SGCT applications.
+namespace {
+  // The application state that is shared from the server to all clients
+  double currentTime = 0.0;
+} // namespace
 
+void preSync() {
+  // Only the server's value matters, as it is sent to the clients in `encode`
+  if (Engine::instance().isMaster()) {
+    currentTime = time();
+  }
+}
 
-## First application
-Creating applications using SGCT is very simple and requires only a bit of coding. Here is an example that opens a window and sets its color to white. Please note that SGCT only supports modern OpenGL versions (3.3 and newer), which means that the legacy fixed-pipeline functions will *not* work.
+std::vector<std::byte> encode() {
+  std::vector<std::byte> data;
+  serializeObject(data, currentTime);
+  return data;
+}
 
-See also the Calibrator application that is included in the repository. It is build by enabling the `SGCT_BUILD_CALIBRATOR` CMake setting.
+void decode(const std::vector<std::byte>& data) {
+  unsigned int pos = 0;
+  deserializeObject(data, pos, currentTime);
+}
 
-This is a simple application that will render the viewport in white:
-
-```cpp
-#include "sgct/sgct.h"
-
-void drawFun(const RenderData& data) {
-  glClearColor(1.f, 1.f, 1.f, 1.f);
-  glClear();
+void draw(const RenderData&) {
+  const float brightness = static_cast<float>(0.5 + 0.5 * std::sin(currentTime));
+  glClearColor(brightness, brightness, brightness, 1.f);
+  glClear(GL_COLOR_BUFFER_BIT);
 }
 
 int main(int argc, char** argv) {
   std::vector<std::string> arg(argv + 1, argv + argc);
   Configuration config = parseArguments(arg);
   config::Cluster cluster = loadCluster(config.configFilename);
+  if (!cluster.success) {
+    return EXIT_FAILURE;
+  }
 
   Engine::Callbacks callbacks;
-  callbacks.draw = drawFun;
+  callbacks.preSync = preSync;
+  callbacks.encode = encode;
+  callbacks.decode = decode;
+  callbacks.draw = draw;
 
   try {
     Engine::create(cluster, callbacks, config);
   }
   catch (const std::runtime_error& e) {
-    Log::Error("%s", e.what());
+    Log::Error(e.what());
     Engine::destroy();
     return EXIT_FAILURE;
   }
 
-  Engine::instance().render();
+  Engine::instance().exec();
   Engine::destroy();
   return EXIT_SUCCESS;
 }
 ```
 
-The control flow in SGCT is explained in the [How it works](/docs/overview/how-it-works) section of this documentation.
+`Engine::instance().exec()` starts the frameloop, which only ends when the last window has been closed or `Engine::terminate` was called. During the frameloop, the callbacks passed into `Engine::create` are called at the times shown in the diagram on the [How it works](/docs/overview/how-it-works) page. The `draw` callback is called once for every viewport and eye; a real application renders its scene there using the matrices in the [`RenderData`](/docs/overview/how-it-works#draw) argument.
 
-`Engine::instance().render()` will cause a frameloop to start that will only end when the last window has been closed or the `Engine::terminate` function was called. During this farameloop the callbacks passed into the `Engine::create` functions are called at the appropriate times as shown in the diagram of the How it works page.
+A matching `CMakeLists.txt` for the vcpkg setup is:
+
+```cmake title="CMakeLists.txt"
+cmake_minimum_required(VERSION 4.0)
+project(hello-sgct LANGUAGES CXX)
+
+find_package(sgct CONFIG REQUIRED)
+
+add_executable(hello-sgct main.cpp)
+target_compile_features(hello-sgct PRIVATE cxx_std_23)
+target_link_libraries(hello-sgct PRIVATE sgct::sgct)
+```
+
+The project is configured with the vcpkg toolchain file and built like any other CMake project:
+
+```bash
+cmake -B build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
+cmake --build build
+```
+
+The [Calibrator](/docs/building/calibrator) application in the SGCT repository is a larger example that uses most of the callbacks.
+
+## Running on a single computer
+Started without any arguments, SGCT creates a "cluster" consisting of a single node with a single 1280x720 window:
+
+```bash
+hello-sgct
+```
+
+All other setups are described by a JSON configuration file that is passed with the `--config` argument. The format of these files is described in the [Configuration files](/docs/reference/configuration/) section, and the [Examples](/docs/examples) section contains ready-made files, for example the [Single Node](/docs/examples/single) configuration:
+
+```bash
+hello-sgct --config single.json
+```
+
+## Running multiple nodes on one computer
+A configuration file can contain multiple nodes that all run on the same computer, which is useful to test a cluster setup without access to the cluster. As the automatic detection cannot determine which of the nodes an instance should be, each instance has to be started with `--local` and the index of its node in the configuration file. Every node that is *not* the server also needs the `--client` argument, or it will consider itself the server and not try to connect to the actual server node. Using the [Two Nodes](/docs/examples/two-nodes) example, the two instances are started in separate terminals:
+
+```bash
+hello-sgct --config two-nodes.json --local 0
+hello-sgct --config two-nodes.json --local 1 --client
+```
+
+The server waits until all clients have connected before it starts rendering, and both windows pulse in sync.
+
+## Running on a cluster
+On an actual cluster, the application and the configuration file are copied to every computer, and the `address` of each [Node](/docs/reference/configuration/node) is set to the IP address or DNS name of the computer it should run on. The `masteraddress` of the [Cluster](/docs/reference/configuration/cluster) designates which of the nodes is the server. The application is then started on every computer with the same arguments:
+
+```bash
+hello-sgct --config cluster.json
+```
+
+Each instance finds its own node by comparing the addresses in the configuration file with the addresses of the computer it runs on, so neither `--local` nor `--client` is needed. The [Synchronization](/docs/overview/synchronization) page describes how the nodes keep their frames in step, and [Commandline arguments](/docs/reference/commandline) lists all arguments that SGCT applications accept, which is also printed by running the application with `--help`.

@@ -1,5 +1,6 @@
 import {createContext, useContext} from 'react';
 import type {ReactNode} from 'react';
+import useBrokenLinks from '@docusaurus/useBrokenLinks';
 import clsx from 'clsx';
 import styles from './parameter.module.css';
 
@@ -33,6 +34,8 @@ export default ({
   const {depth, idPrefix} = useContext(ParameterContext);
   const anchor = id ?? (idPrefix ? `${idPrefix}-${slug(name)}` : slug(name));
   const content = children ?? documentation;
+  // Registers the anchor so that links to it pass the build's broken anchor check
+  useBrokenLinks().collectAnchor(anchor);
 
   return (
     <div id={anchor} className={clsx(styles.parameter, depth > 0 && styles.nested)}>

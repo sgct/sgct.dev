@@ -1,0 +1,29 @@
+---
+sidebar_position: 2
+---
+
+# Calibrator
+The Calibrator is a small application that is included in the SGCT repository in the `calibrator` folder. It renders a test scene that makes it easy to verify a configuration file or to align projectors. All of the images in the [Examples](/docs/examples) and the projection pages of this documentation were rendered with the Calibrator.
+
+## Running
+To test a configuration file with multiple nodes on a single machine, start one instance per node with the `--local` argument and add `--client` to all but the server node:
+
+```bash
+./calibrator --config ../../../config/two_nodes.json --local 0
+./calibrator --config ../../../config/two_nodes.json --local 1 --client
+```
+
+## Keyboard controls
+The key bindings are also printed to the log when the application starts. All of the state that they change is synchronized from the server to all clients, so the keys only have to be pressed on the server node.
+
+| Key | Action |
+| --- | --- |
+| `Space` | Toggle between the test pattern cube and the hemisphere grid |
+| `Left` / `Right` | Rotate the camera to the left or the right |
+| `Up` / `Down` | Rotate the camera up or down |
+| `I` | Show the node id and IP address |
+| `S` | Show the statistics graphs |
+| `P` | Take a screenshot |
+| `B` | Toggle between capturing screenshots from the front buffer and the back buffer |
+| `Enter` | Run a sequence of front and back buffer screenshot tests and terminate |
+| `Esc` | Terminate the application |

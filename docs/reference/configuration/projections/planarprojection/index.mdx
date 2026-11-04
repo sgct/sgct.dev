@@ -15,8 +15,8 @@ Describes a projection for the Viewport that is a flat projection described by s
 Defines the type of this projection. To use the Planar Projection, this value has to be `PlanarProjection`.
 </Parameter>
 
-<Parameter name="fov">
-This element describes the field of view used by the camera in this planar projection. The field of view can be specified in one of two ways: either symmetrically through `hfov` and `vfov`, or asymmetrically through `left`, `right`, `down`, and `up`.
+<Parameter name="fov" type="Object">
+This object describes the field of view used by the camera in this planar projection. The field of view can be specified in one of two ways: either symmetrically through `hfov` and `vfov`, or asymmetrically through `left`, `right`, `down`, and `up`.
 
   <Parameter name="hfov" type="number" optional>The angle (in degrees) covered by the camera in the horizontal direction. This is a symmetric frustum around the center and provides the same result as providing the `left` and `right` values with the half-angle. Must be used together with `vfov`.</Parameter>
   <Parameter name="vfov" type="number" optional>The angle (in degrees) covered by the camera in the vertical direction. This is a symmetric frustum around the center and provides the same result as providing the `up` and `down` values with the half-angle. Must be used together with `hfov`.</Parameter>
@@ -28,7 +28,7 @@ This element describes the field of view used by the camera in this planar proje
 </Parameter>
 
 <Parameter name="distance" type="number" optional default="10.0">
-The distance (in meters) at which the virtual render plane is placed. This value is only important when rendering this viewport using stereocopy as the `distance` and the User's `eyeseparation` are used to compute the change in frustum between the left and the right eyes.
+The distance (in meters) at which the virtual render plane is placed. This value is only important when rendering this viewport using stereoscopy as the `distance` and the User's `eyeseparation` are used to compute the change in frustum between the left and the right eyes.
 </Parameter>
 
 <Parameter name="orientation" type={<Link to="/docs/reference/configuration/basetypes#orientation">Orientation</Link>} optional>
@@ -36,7 +36,7 @@ Describes a fixed orientation for the virtual image plane. This can be provided 
 </Parameter>
 
 <Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional default="0,0,0">
-A linear offset in meters that is added to the virtual image plane. Must define three float attributes `x`, `y`, and `z`.
+A linear offset in meters that is added to the virtual image plane. Must define the three values `x`, `y`, and `z`.
 </Parameter>
 
 ## Examples

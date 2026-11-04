@@ -1,0 +1,39 @@
+---
+sidebar_position: 4
+---
+
+# Synchronization
+For a cluster to show a single coherent image, all of its nodes have to render the same content and present their frames at the same time. SGCT handles three separate aspects of this:
+
+  - **Data synchronization** makes sure that all nodes render the same application state. The server sends its state to the clients every frame, as described on the [Shared data](/docs/overview/shared-data) page.
+  - **Frame lock** is a network-based handshake that keeps the render loops of the server and the clients in step, so that no node starts or presents a frame before the others are ready.
+  - **Swap lock** uses NVIDIA swap groups and swap barriers in the graphics hardware to make the buffer swaps of all nodes happen at exactly the same time.
+
+## What happens in a frame
+The steps below follow the order of the render loop shown in [How it works](/docs/overview/how-it-works):
+
+1. The server calls `preSync`, serializes its state using the `encode` callback, and sends the result to all clients, together with a frame number.
+1. Each client waits until the server's message for the frame has arrived, which triggers its `decode` callback, and then sends an acknowledgement back to the server.
+1. All nodes call `postSyncPreDraw`, render their windows, and call `postDraw`.
+1. With firm synchronization, the server now waits until every client has acknowledged the current frame. With loose synchronization, the server continues without waiting.
+1. All nodes swap the front and back buffers of their windows.
+
+The clients therefore never render a frame without the server's data for it. The firm synchronization additionally prevents the server from running ahead of the clients.
+
+## Firm and loose synchronization
+The `firmsync` value of the [Cluster](/docs/reference/configuration/cluster#firmsync) enables the firm frame lock. It is disabled by default, resulting in a loose synchronization. Firm synchronization is the right choice for setups that do not use swap lock and in which the images of the nodes are visible at the same time, such as a multi-projector dome, as it keeps all nodes on the same frame at the cost of the cluster running at the speed of its slowest node.
+
+The configuration value can be overwritten at application start with the [`--firm-sync`](/docs/reference/commandline#firm-sync) and [`--loose-sync`](/docs/reference/commandline#loose-sync) commandline arguments.
+
+## Swap lock
+Setting `swaplock` to `true` on a [Node](/docs/reference/configuration/node#swaplock) makes SGCT join the node's windows to an NVIDIA swap group and bind it to the same swap barrier through the `WGL_NV_swap_group` OpenGL extension. With all nodes in the same swap barrier, the graphics cards present their frames in unison, which removes the tearing between neighboring displays or projectors that a purely network-based frame lock cannot fully prevent.
+
+Swap lock is only available on Windows and requires NVIDIA professional graphics cards that are connected to each other through NVIDIA's frame synchronization hardware (a Quadro Sync or NVIDIA Sync card). If the extension is not available, the node continues without swap groups; at startup, SGCT logs whether swap groups are supported by the hardware.
+
+## Waiting and timeouts
+All nodes of a cluster wait at startup until every node has connected, before the first frame is rendered. During the rendering, whenever a node has been waiting for longer than one second on the other nodes, SGCT logs a message that names the node it is waiting for, the frame numbers sent and received, and whether swap groups and swap barriers are active. These messages are enabled by default; the [`--print-wait-message`](/docs/reference/commandline#print-wait-message) argument enables them explicitly.
+
+If a node waits longer than the timeout, SGCT terminates the application with an error ("No sync signal from master" on a client or "No sync signal from clients" on the server). The timeout defaults to 60 seconds and can be changed with the [`--wait-timeout`](/docs/reference/commandline#wait-timeout) argument, which takes the number of seconds.
+
+## V-Sync
+Independent of the synchronization between nodes, the [`swapinterval`](/docs/reference/configuration/settings#display-swapinterval) value in the `display` settings controls the V-Sync of each node. A value of `0` disables V-Sync and `1` synchronizes the buffer swaps with the refresh rate of the monitor.

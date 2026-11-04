@@ -18,7 +18,56 @@ This command starts a local development server and opens up a browser window. Mo
 npm run build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+This command generates static content into the `build` directory and can be served using any static contents hosting service. The build fails on broken links and broken anchors.
+
+## Checks
+```bash
+npm run lint
+npm run validate-configs
+```
+
+`npm run lint` runs [markdownlint](https://github.com/DavidAnson/markdownlint) with the rules in `.markdownlint.json` over the documentation pages and this README. `npm run validate-configs` validates every JSON file in `docs/` against the `sgct.schema.json` of the SGCT repository, which ensures that the configuration files offered for download can be loaded by SGCT. It fetches the schema from GitHub and accepts the same `SGCT_SOURCE_DIR` and `SGCT_REF` environment variables as the [API generation](#c-api-reference). Both checks run on every build in the `Jenkinsfile`.
+
+## Writing documentation
+The documentation pages are MDX files in `docs/`, split into the `overview`, `reference`, `building`, and `examples` folders that each have their own sidebar. The sidebars are generated from the folder structure; the order of the pages is set by the `sidebar_position` in the front matter of a page or by a `_category_.json` file in a folder. Links between pages use absolute paths such as `/docs/reference/configuration/window#stereo`.
+
+Lists are indented by two spaces, ordered lists use `1.` for every item, and the prose uses "server" and "client" for the roles of the nodes, even where the configuration file and the API use the older "master".
+
+### Components
+The following components are registered in `src/theme/MDXComponents.tsx` and can be used on every page:
+
+| Component | Used for |
+| --- | --- |
+| `Parameter` | A value of a configuration file object. Takes `name`, `type`, `optional`, and `default`; the description is the content, and nested `Parameter`s describe the values of an object |
+| `Argument` | A commandline argument. Takes `name`, `alias`, `value`, and `default`; the description is the content |
+| `Example` | A configuration file next to the image it produces, with a download link for the file. Takes the file contents as `json`, the download name as `file`, and the rendering as `image`; the optional content is shown as a description above |
+| `Gallery` | A grid of linked thumbnails, as used on the projections overview. Takes `items`, a list of `name`, `to`, and an optional `image` |
+
+```mdx
+<Parameter name="size" type={<Link to="/docs/reference/configuration/basetypes#ivec2">ivec2</Link>}>
+Sets the size of the window in pixels.
+</Parameter>
+```
+
+Every `Parameter` and `Argument` creates an anchor from its name. Nested parameters prefix their anchor with the anchor of their parent, so the `swapinterval` inside `display` can be linked as `#display-swapinterval`.
+
+### Adding an example
+Each example is a folder that contains the page, the configuration file, and an image of the result:
+
+1. Create a folder in `docs/examples` (or next to the reference page the example belongs to) with an `index.mdx`
+1. Add the configuration file. It has to use the current configuration file version and has to pass `npm run validate-configs`
+1. Run the [Calibrator](https://sgct.dev/docs/building/calibrator) application with the configuration file, take a screenshot with the `P` key, and convert it to WebP, for example with `cwebp`
+1. Import both files into the page and pass them to the `Example` component. The `?raw` suffix imports the configuration file as text, which the component displays and offers for download unchanged
+
+```mdx
+import json from './two-windows.json?raw';
+import image from './two-windows.webp';
+
+# Two Windows
+<Example json={json} file="two-windows.json" image={image}>
+A short description of what the example shows.
+</Example>
+```
 
 ## C++ API reference
 The Doxygen reference embedded in the site at `/api/` is not part of `npm run build`; it is generated separately so that building the site needs neither Doxygen nor network access:

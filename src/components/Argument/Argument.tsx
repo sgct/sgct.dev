@@ -1,4 +1,5 @@
 import type {ReactNode} from 'react';
+import useBrokenLinks from '@docusaurus/useBrokenLinks';
 import styles from './argument.module.css';
 
 // `--screenshot-path` becomes the anchor `screenshot-path`.
@@ -26,6 +27,8 @@ export default ({
 }: Props) => {
   const anchor = id ?? slug(name);
   const content = children ?? documentation;
+  // Registers the anchor so that links to it pass the build's broken anchor check
+  useBrokenLinks().collectAnchor(anchor);
 
   return (
     <div id={anchor} className={styles.argument}>

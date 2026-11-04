@@ -23,8 +23,8 @@ A single umbrella header pulls in everything an application normally needs:
 
 From there, the types that matter for a first application are:
 
-  - [`Engine`](pathname:///api/classsgct_1_1_engine.html) is the central object. It is created once through `Engine::create`, owns the frameloop started by `Engine::instance().render()`, and dispatches to the callbacks your application provides. The [First application](/docs/building/getting-started) example uses nothing else
-  - [`Engine::Callbacks`](pathname:///api/structsgct_1_1_engine_1_1_callbacks.html) is the struct of `std::function` members that you fill in to hook into the frameloop. The order in which they are called is laid out in [How it works](/docs/overview/how-it-works)
+  - [`Engine`](pathname:///api/classsgct_1_1_engine.html) is the central object. It is created once through `Engine::create`, owns the frameloop started by `Engine::instance().exec()`, and dispatches to the callbacks your application provides. The [first application](/docs/building/getting-started#a-first-application) example only needs this class, the free functions `parseArguments` and `loadCluster`, and the `Log`
+  - [`Engine::Callbacks`](pathname:///api/structsgct_1_1_engine_1_1_callbacks.html) is the struct of function pointers that you fill in to hook into the frameloop. Every member is optional and defaults to `nullptr`. The order in which they are called is laid out in [How it works](/docs/overview/how-it-works)
   - [`RenderData`](pathname:///api/structsgct_1_1_render_data.html) is handed to the draw callbacks and carries the window, viewport, and matrices for the pass currently being rendered
   - [`Log`](pathname:///api/classsgct_1_1_log.html) is the logging facility that SGCT itself uses, and that applications are encouraged to use so that messages from all nodes end up in one place
 

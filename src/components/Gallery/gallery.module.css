@@ -1,0 +1,48 @@
+/**
+ * A grid of linked thumbnails, each a rendering with its name underneath. The cards share
+ * their frame with the example blocks elsewhere on the site.
+ */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin: 1.75rem 0;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-global-radius);
+  overflow: hidden;
+  color: var(--ifm-font-color-base);
+  transition: border-color var(--ifm-transition-fast, 200ms) ease;
+}
+
+.item:hover {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+/* The renderings come in different aspect ratios, so each is fitted into the same box. */
+.thumbnail {
+  aspect-ratio: 16 / 9;
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.thumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.name {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}

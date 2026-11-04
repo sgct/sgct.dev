@@ -1,0 +1,75 @@
+# Mesh formats
+Warping meshes describe how the rendered image of a viewport has to be distorted so that it appears correct on a curved or otherwise non-flat display surface, or when it is projected from an angle. SGCT renders the application's content into a regular, rectangular framebuffer first and then draws that framebuffer as a texture onto the geometry of the mesh. Some formats additionally contain per-vertex intensities that are used for edge blending between overlapping projectors.
+
+Meshes are used in two places in a configuration file:
+
+  - The [`mesh`](/docs/reference/configuration/viewport#mesh) value of a Viewport applies a single warping mesh to that viewport
+  - The [`geometry`](/docs/reference/configuration/projections/sphericalmirrorprojection#geometry) of a SphericalMirrorProjection specifies four meshes, one each for the bottom, left, right, and top part of the image
+
+In both cases, the path to the mesh file is relative to the location of the configuration file. The format is determined by the file extension, which has to be lowercase. A file with any other extension causes an error when the mesh is loaded.
+
+| Extension | Format |
+| --- | --- |
+| `.sgc` | [SCISS](#sciss) |
+| `.ol` | [Scalable](#scalable) |
+| `.skyskan`, `.txt` | [SkySkan](#skyskan) |
+| `.csv` | [Dome Projection](#dome-projection) |
+| `.data` | [Paul Bourke](#paul-bourke) |
+| `.obj` | [Wavefront OBJ](#wavefront-obj) |
+| `.pfm` | [Portable Float Map](#portable-float-map) |
+| `.simcad` | [SimCAD](#simcad) |
+
+## SCISS
+A binary format created by SCISS for its Uniview software. The file starts with the identifier `SGC`, followed by the file version; SGCT handles versions 1 and 2 of the format. Besides the mesh itself, the file contains view information: an orientation, a position, and the field of view towards the top, bottom, left, and right. SGCT applies this information to the viewport, which means that the mesh file determines the viewport's frustum and the position of its user, regardless of the values in the configuration file.
+
+SCISS defines a planar mapping type for 2D warping meshes and a cube mapping type for 3D cubemap lookups. SGCT only uses the first two texture coordinates of each vertex, so only meshes with the planar mapping type are supported.
+
+## Scalable
+A text-based mesh format written by the calibration software of Scalable Display Technologies. SGCT expects the header `OPENMESH Version 1.1` and supports the `NORMALIZED` mapping, `LINEAR` sampling, and `PERSPECTIVE` projection, and it has been tested with subversion 5 of the format. Other values are reported as warnings while the file is loaded. The per-vertex intensity values in the file are used for blending.
+
+If the file contains the `PERSPECTIVE_LEFT`, `PERSPECTIVE_RIGHT`, `PERSPECTIVE_TOP`, and `PERSPECTIVE_BOTTOM` field-of-view values, they replace the viewport's frustum, oriented by the `PERSPECTIVE_YAW`, `PERSPECTIVE_PITCH`, and `PERSPECTIVE_ROLL` angles. The `PERSPECTIVE_XOFFSET`, `PERSPECTIVE_YOFFSET`, and `PERSPECTIVE_ZOFFSET` values offset the projection plane.
+
+Some features of the format are not supported:
+
+  - Per-viewport `GAMMA` values
+  - The sphere sample coordinate system (`USE_SPHERE_SAMPLE_COORDINATE_SYSTEM`) and the frustum Euler angles (`FRUSTUM_EULER_ANGLES`)
+  - The `APPLY_MASK`, `APPLY_BLACK_LEVEL`, and `APPLY_COLOR` instructions. Use the [`blendmask`](/docs/reference/configuration/viewport#blendmask), [`blacklevelmask`](/docs/reference/configuration/viewport#blacklevelmask), and [`overlay`](/docs/reference/configuration/viewport#overlay) values of the viewport instead
+
+This reader is unrelated to the [`scalablemesh`](/docs/reference/configuration/window#scalablemesh) value of a Window, which loads a Scalable calibration through Scalable's EasyBlend SDK and requires SGCT to be built with `SGCT_SCALABLE_SUPPORT`.
+
+## SkySkan
+A text-based mesh format used by SkySkan planetarium systems. As SGCT also uses this reader for files with the `.txt` extension, any `.txt` file is interpreted as a SkySkan mesh. The file consists of `key=value` header lines, followed by a line with the number of columns and rows of the mesh, followed by one line per vertex with four values: the `x` and `y` position and the `u` and `v` texture coordinate.
+
+The following header lines are read:
+
+  - `Dome Azimuth` and `Dome Elevation` (required) orient the viewport's frustum
+  - `Horizontal FOV` (required) and `Vertical FOV` determine the field of view of the viewport in degrees. If the vertical field of view is missing, it is computed from the horizontal field of view assuming a 2048x1200 image
+  - `Horizontal Tweak` and `Vertical Tweak` scale the horizontal and vertical field of view
+  - `U Tweak` and `V Tweak` scale the texture coordinates
+
+The mesh has to be at least 2x2 vertices large and has to contain exactly as many vertices as specified. Vertices with an `x` or `y` value of `-1` mark positions outside of the projected image and the triangles that use them are not rendered. As with the SCISS format, the file determines the viewport's frustum, and the position of its user is reset to the origin.
+
+## Dome Projection
+A text-based format exported by the [domeprojection.com](https://www.domeprojection.com) calibration software. Each line describes one vertex as six semicolon-separated values: `x;y;u;v;column;row`. The `x` and `y` positions and the `u` and `v` texture coordinates are in the range 0 to 1, while the column and row determine the vertex' place in the mesh grid. The lines can appear in any order, but together they have to form a complete grid.
+
+## Paul Bourke
+A text-based format by [Paul Bourke](https://paulbourke.net/dome/), primarily used for spherical mirror projections in which a single projector bounces its image off a spherical mirror onto a dome. The first line contains the mapping type, which SGCT does not use, and the second line the number of columns and rows of the mesh, each at least 2. All following lines describe one vertex each with five values: the `x` and `y` position, the `u` and `v` texture coordinate, and an intensity between 0 and 1 that is used for blending. The `y` position is in the range -1 to 1 and the `x` position in the range of minus to plus the window's aspect ratio. The number of vertices has to match the specified dimensions.
+
+When this format is used on a viewport with a [FisheyeProjection](/docs/reference/configuration/projections/fisheyeprojection), the fisheye ignores the aspect ratio of the window and renders a square image that is then distorted by the mesh. The SGCT repository contains a mesh in this format for a standard 16:9 projector in its `config/mesh` folder.
+
+## Wavefront OBJ
+The widely used, text-based Wavefront OBJ geometry format. SGCT reads the vertex positions (`v`), the texture coordinates (`vt`), and the faces (`f`) of the file:
+
+  - The `x` and `y` values of a position are used directly as OpenGL normalized device coordinates in the range -1 to 1 that cover the entire window. Unlike the other formats, they are not scaled to the position and size of the viewport. The `z` value is not supported and SGCT warns if it is not 0
+  - The file has to contain exactly as many texture coordinates as positions, and the n-th texture coordinate belongs to the n-th position; texture or normal indices in the face definitions are ignored
+  - Faces are read as triangles that reference the vertices with positive (absolute) indices. Only the first three vertices of each face are used, so polygons with more vertices have to be triangulated first
+
+Normals, materials, groups, objects, lines, and other elements are ignored with a warning.
+
+## Portable Float Map
+A mesh stored as a Portable Float Map (PFM) image, a format that saves floating point values for every pixel. The header has to start with `PF`, the three-channel variant of the format, and each pixel is one vertex of the mesh. The first two channels store the `x` and `y` coordinate of the vertex in the range 0 to 1, and the third channel is not used. The data is read in the byte order of the machine, the endianness given in the header is not taken into account.
+
+For most projections, the image has to contain two meshes side by side, one for the left eye in the left half and one for the right eye in the right half, which makes it possible to use a separate correction for each eye in stereoscopic setups. For a [TextureMappedProjection](/docs/reference/configuration/projections/texturemappedprojection), the image contains a single mesh that is applied in reverse: the vertices form a regular grid in the output image, and the pixel values are used as the texture coordinates into the rendered image.
+
+## SimCAD
+An XML-based format written by the SimCAD projector alignment software. The root element `GeometryFile` has to contain a `GeometryDefinition` element with the two child elements `X-FlatParameters` and `Y-FlatParameters`. Each of them contains a whitespace-separated list of correction values for a square grid (SimCAD uses 33x33 values) and a `range` attribute by which these values are divided. An element without a `range` attribute is ignored. The correction values are offsets that are applied to a regular grid covering the viewport, which is why a file without any warping contains only zeros. Both elements have to contain the same number of values, and that number has to be the square of a value of at least 2.

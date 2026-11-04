@@ -2,11 +2,12 @@
 sidebar_position: 0
 ---
 
+import singleJson from '../../examples/single/single.json?raw';
+import singleImage from '../../examples/single/single.webp';
+
 # Configuration files
-The format for the SGCT configuration files is JSON that defines the entire [Cluster](cluster) containing 1 or more [Node](node) fields, a [User](user) field, an optional [Settings](settings) field, an optional [Capture](capture) field, and an optional [Tracker](tracker) field. Each of the components in the configuration files are described in their own pages. Each configuration file has to fulfill the JSON schema which can be found in the [SGCT repository](https://raw.githubusercontent.com/sgct/sgct/master/sgct.schema.json).
+The format for the SGCT configuration files is JSON that defines the entire [Cluster](cluster) containing one or more [Node](node) objects, one or more [User](user) objects, and the optional [Scene](scene), [Settings](settings), [Capture](capture), and [Tracker](tracker) objects. Each of the components in the configuration files is described on its own page. Each configuration file has to fulfill the JSON schema which can be found in the [SGCT repository](https://raw.githubusercontent.com/sgct/sgct/master/sgct.schema.json).
 
-This is an example configuration file. For more examples, check out the `config` folder that comes with SGCT or the [Examples](/docs/examples) section in this documentation.
+This is an example of a single node configuration file. For more examples, check out the `config` folder that comes with SGCT or the [Examples](/docs/examples) section in this documentation.
 
-A single node configuration file ([download](../../examples/single/single.json)).
-```json file=<rootDir>/docs/examples/single/single.json
-```
+<Example json={singleJson} file="single.json" image={singleImage} defaultTab="json" />

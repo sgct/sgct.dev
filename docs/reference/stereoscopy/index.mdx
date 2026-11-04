@@ -24,40 +24,63 @@ import vertical_interlaced_inverted_json from './vertical_interlaced_inverted.js
 import vertical_interlaced_inverted_image from './vertical_interlaced_inverted.webp';
 
 # Stereoscopy
-This page contains all of the different stereoscopic rendering methods supported by SGCT.
+This page contains all of the different stereoscopic rendering methods supported by SGCT. The method is selected with the [`stereo`](/docs/reference/configuration/window#stereo) value of a window, and the distance between the eyes is determined by the `eyeseparation` of the [User](/docs/reference/configuration/user). Each example shows the configuration file that selects the method and the image that the [Calibrator](/docs/building/calibrator) application renders with it.
+
+## Active
+Active stereo (`active`, or its alias `quadbuffer`) renders the left and right eye images into separate back buffers of a quad-buffered OpenGL context. Displaying them requires a graphics card, driver, and display that support quad-buffered stereo, which are typically used together with shutter glasses. As the eyes are shown alternately by the display, there is no single image that could be shown here.
 
 ## Anaglyph Amber-Blue
-<Example json={anaglyph_amber_blue_json} file="anaglyph_amber_blue.json" image={anaglyph_amber_blue_image} />
+<Example json={anaglyph_amber_blue_json} file="anaglyph_amber_blue.json" image={anaglyph_amber_blue_image}>
+Both eyes are combined into a single image using color filters, so that the image can be viewed with amber-blue anaglyph glasses.
+</Example>
 
 ## Anaglyph Red-Cyan
-<Example json={anaglyph_red_cyan_json} file="anaglyph_red_cyan.json" image={anaglyph_red_cyan_image} />
+<Example json={anaglyph_red_cyan_json} file="anaglyph_red_cyan.json" image={anaglyph_red_cyan_image}>
+Both eyes are combined into a single image using color filters, so that the image can be viewed with red-cyan anaglyph glasses.
+</Example>
 
 ## Anaglyph Wimmer
 <Example json={anaglyph_wimmer_json} file="anaglyph_wimmer.json" image={anaglyph_wimmer_image}>
-Anaglyph with Peter Wimmer's optimized color selection. See more [here](https://www.3dtv.at/Knowhow/AnaglyphComparison_en.aspx).
+Anaglyph for red-cyan glasses with Peter Wimmer's optimized color selection, which reduces the color distortions of the regular red-cyan anaglyph. See the [anaglyph comparison](https://www.3dtv.at/Knowhow/AnaglyphComparison_en.aspx) for more information.
 </Example>
 
 ## Checkerboard
-<Example json={checkerboard_json} file="checkerboard.json" image={checkerboard_image} />
+<Example json={checkerboard_json} file="checkerboard.json" image={checkerboard_image}>
+The left and right eye images are interleaved in a checkerboard pattern, in which neighboring pixels alternate between the eyes. This format is used by DLP projectors and displays.
+</Example>
 
-<Example json={checkerboard_inverted_json} file="checkerboard_inverted.json" image={checkerboard_inverted_image}>inverted</Example>
+<Example json={checkerboard_inverted_json} file="checkerboard_inverted.json" image={checkerboard_inverted_image}>
+The same checkerboard pattern with the left and right eyes swapped.
+</Example>
 
 ## Dummy
 <Example json={dummy_json} file="dummy.json" image={dummy_image}>
-A dummy stereo rendering where both the left and the right eyes are rendered on top of each other. In general usage not very practical, but this mode can be used when rendering out screenshots as these will be automatically separated into a left/right pair.
+A dummy stereo rendering (`dummy`, or its alias `test`) where both the left and the right eyes are rendered on top of each other. In general usage not very practical, but this mode can be used when rendering out screenshots as these will be automatically separated into a left/right pair.
 </Example>
 
 ## Side-by-side
-<Example json={side_by_side_json} file="side_by_side.json" image={side_by_side_image} />
+<Example json={side_by_side_json} file="side_by_side.json" image={side_by_side_image}>
+The window is split into a left half and a right half, with the left eye rendered into the left half and the right eye rendered into the right half. This is a common format for 3D TVs.
+</Example>
 
-<Example json={side_by_side_inverted_json} file="side_by_side_inverted.json" image={side_by_side_inverted_image}>inverted</Example>
+<Example json={side_by_side_inverted_json} file="side_by_side_inverted.json" image={side_by_side_inverted_image}>
+The same side-by-side layout with the left and right eyes swapped.
+</Example>
 
 ## Top-Bottom
-<Example json={top_bottom_json} file="top_bottom.json" image={top_bottom_image} />
+<Example json={top_bottom_json} file="top_bottom.json" image={top_bottom_image}>
+The window is split into a top half and a bottom half, with the left eye rendered into the top half and the right eye rendered into the bottom half.
+</Example>
 
-<Example json={top_bottom_inverted_json} file="top_bottom_inverted.json" image={top_bottom_inverted_image}>inverted</Example>
+<Example json={top_bottom_inverted_json} file="top_bottom_inverted.json" image={top_bottom_inverted_image}>
+The same top-bottom layout with the left and right eyes swapped.
+</Example>
 
 ## Vertical Interlaced
-<Example json={vertical_interlaced_json} file="vertical_interlaced.json" image={vertical_interlaced_image} />
+<Example json={vertical_interlaced_json} file="vertical_interlaced.json" image={vertical_interlaced_image}>
+The left and right eye images are interlaced line by line, so that each row of the final image alternates between the left and the right eye. This format is used by line-interlaced passive 3D displays.
+</Example>
 
-<Example json={vertical_interlaced_inverted_json} file="vertical_interlaced_inverted.json" image={vertical_interlaced_inverted_image}>inverted</Example>
+<Example json={vertical_interlaced_inverted_json} file="vertical_interlaced_inverted.json" image={vertical_interlaced_inverted_image}>
+The same interlaced layout with the left and right eyes swapped.
+</Example>

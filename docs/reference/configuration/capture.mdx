@@ -5,13 +5,19 @@ Contains information relevant to capturing screenshots from an SGCT application.
 
 ## Parameters
 <Parameter name="path" type="string" optional>
-Sets the path used when creating screenshots. The default value is to use the current working directory.
+Sets the path used when creating screenshots. The default value is to use the current working directory or, if it was provided, the path passed with the [`--screenshot-path`](/docs/reference/commandline#screenshot-path) commandline argument. If this value is set, it takes precedence over the commandline argument.
 </Parameter>
 
-<Parameter name="rangebegin" type="integer" optional default="0">
-The index of the first screenshot that will actually be rendered. If this value is set, all previous screenshots will be ignored, but the counter will be increased either way. If this value is set, the `range-end` value also needs to be set.
+<Parameter name="rangebegin" type="integer" optional>
+The index of the first screenshot that will actually be stored. All previous screenshots will be skipped, but the screenshot counter will be increased either way. By default, no screenshots are skipped at the beginning.
 </Parameter>
 
-<Parameter name="rangeend" type="integer" optional default="-1">
-The index of the last screenshot that will not be rendered anymore. If this value is set, all screenshots starting with this index will be ignored. If this value is set, the `range-begin` value also needs to be set. A value of `-1` will mean that all remaining screenshots will be captured.
+<Parameter name="rangeend" type="integer" optional>
+The index of the first screenshot that will not be stored anymore. All screenshots starting with this index will be skipped. If this value is set, the `rangebegin` value also needs to be set and has to be smaller than this value. By default, all remaining screenshots are stored.
+</Parameter>
+
+<Parameter name="bitdepth" type="8 or 16" optional default="8">
+The number of bits per color channel of the stored screenshots. The screenshot bit depth is independent of the window's [`bufferbitdepth`](/docs/reference/configuration/window#bufferbitdepth), as the framebuffer contents are converted when they are read back.
+
+Allowed values: `8`, `16`
 </Parameter>

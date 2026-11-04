@@ -49,6 +49,17 @@ pre.language-text {
   hyphens: auto;
 }
 
+/* Illustrations in the documentation pages with a caption underneath. */
+.theme-doc-markdown figure {
+  margin: 0 0 var(--ifm-leading);
+  text-align: center;
+}
+
+.theme-doc-markdown figcaption {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
 /* GitHub icon link in the navbar. The right-hand navbar items are rendered before the color
    mode toggle and the search bar, so `order` is used to move the link in between them. */
 .navbar__items--right > [class*='colorModeToggle'] {

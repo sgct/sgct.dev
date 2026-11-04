@@ -1,4 +1,5 @@
 .docusaurus
 .doxygen-cache
+build
 node_modules
 static/api-html

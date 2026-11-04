@@ -2,7 +2,7 @@ import Parameter from '/src/components/Parameter/Parameter';
 import Link from '@docusaurus/Link';
 
 # Tracker
-Defines a group of tracking devices or sensors as they are advertised by the VRPN standard. See its documentation for more information on this.
+Defines a group of tracking devices or sensors as they are advertised by [VRPN](https://github.com/vrpn/vrpn). See its documentation for more information on this.
 
 ## Parameters
 <Parameter name="name" type="string">
@@ -10,7 +10,9 @@ The name of the tracker group.
 </Parameter>
 
 <Parameter name="devices" type="Object[]" optional>
-  <Parameter name="name" type="string">Specifies the name of the device so that it can be referenced by a User or can be accessed programmatically by the application.</Parameter>
+  Each object in this array describes one [Device](device) of this tracker group.
+
+  <Parameter name="name" type="string">Specifies the name of the device so that it can be referenced by a [User](user) or can be accessed programmatically by the application.</Parameter>
   <Parameter name="sensors" type="Object[]" optional>
     <Parameter name="vrpnaddress" type="string">The VRPN address of this sensor.</Parameter>
     <Parameter name="id" type="integer">The sensor id for this device. This information is not used by SGCT directly but can be used by the application to distinguish different sensors if multiple sensors are specified in the configuration file.</Parameter>
@@ -23,22 +25,22 @@ The name of the tracker group.
     <Parameter name="vrpnaddress" type="string">The VRPN address of this group of axes.</Parameter>
     <Parameter name="count" type="integer">The number of axes that are advertised by this VRPN device.</Parameter>
   </Parameter>
-  <Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional default="0,0,0">A linear offset that is added to the entire device. Must define three float attributes `x`, `y`, and `z`.</Parameter>
-  <Parameter name="transformation" type={<Link to="/docs/reference/configuration/basetypes#mat4">mat4</Link>} optional>A generic transformation matrix that is applied to this device. This value will overwrite the value specified in `orientation`. All 16 of these values have to be present in this attribute and have to be floating point values and are used in this order to initialize the matrix in a column-major order.</Parameter>
+  <Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional default="0,0,0">A linear offset that is added to the entire device. Must define the three values `x`, `y`, and `z`.</Parameter>
+  <Parameter name="transformation" type={<Link to="/docs/reference/configuration/basetypes#mat4">mat4</Link>} optional>A generic transformation matrix that is applied to this device. All 16 values have to be present, have to be floating point values, and are used in this order to initialize the matrix in column-major order.</Parameter>
 </Parameter>
 
 <Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional default="0,0,0">
-A linear offset of the class of trackers. Must define three float attributes `x`, `y`, and `z`.
+A linear offset that is applied to all devices of this tracker group. Must define the three values `x`, `y`, and `z`.
 </Parameter>
 
 <Parameter name="scale" type="number" optional default="1.0">
-A scaling factor for this class of trackers.
+A scaling factor for all devices of this tracker group.
 </Parameter>
 
 <Parameter name="orientation" type={<Link to="/docs/reference/configuration/basetypes#orientation">Orientation</Link>} optional>
-Describes a fixed orientation for the this device. This can be provided either as Euler angles or as a quaternion. This value will overwrite the value specified in `matrix`.
+Describes a fixed orientation for all devices of this tracker group. This can be provided either as Euler angles or as a quaternion. This value overwrites the value specified in `matrix`.
 </Parameter>
 
 <Parameter name="matrix" type={<Link to="/docs/reference/configuration/basetypes#mat4">mat4</Link>} optional>
-A generic transformation matrix that is applied to this device. This value will overwrite the value specified in `orientation`. All 16 of these values have to be present in this attribute and have to be floating point values and are used in this order to initialize the matrix in a column-major order.
+A generic transformation matrix that is applied to all devices of this tracker group. If `orientation` is specified as well, this value is ignored. All 16 values have to be present, have to be floating point values, and are used in this order to initialize the matrix in column-major order.
 </Parameter>

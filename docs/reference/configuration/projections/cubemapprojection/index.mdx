@@ -4,7 +4,7 @@ import cubemapJson from './cubemap.json?raw';
 import cubemapImage from './cubemap.webp';
 
 # Cubemap Projection
-This projection type will and show the individual faces of a cube surrounding the camera. Individual cubemap faces can be toggled on and off and this projection also has the ability to share the individual cubemap faces.
+This projection type renders and shows the individual faces of a cube surrounding the camera. Individual cubemap faces can be toggled on and off and this projection also has the ability to share the individual cubemap faces.
 
 ## Parameters
 <Parameter name="type" type="string">
@@ -15,14 +15,14 @@ Defines the type of this projection. To use the Cubemap Projection, this value h
 Determines the pixel resolution of the cube map faces that are rendered.
 </Parameter>
 
-<Parameter name="spout" optional>
+<Parameter name="spout" type="Object" optional>
   Settings for sharing the individual cubemap faces to other applications using Spout (only on Windows).
 
   <Parameter name="enabled" type="boolean">Determines whether the output via Spout is enabled.</Parameter>
   <Parameter name="name" type="string" optional>The name under which Spout will share this content. If this value is not specified, a unique name will be automatically generated.</Parameter>
 </Parameter>
 
-<Parameter name="ndi" optional>
+<Parameter name="ndi" type="Object" optional>
   Settings for sharing the individual cubemap faces over the local network using NDI.
 
   <Parameter name="enabled" type="boolean">Determines whether the output via NDI is enabled.</Parameter>
@@ -31,7 +31,7 @@ Determines the pixel resolution of the cube map faces that are rendered.
 </Parameter>
 
 <Parameter name="channels" type="Object" optional>
-  Controls which of the cubemaps should be rendered.
+  Controls which of the cube map faces should be rendered. If this object is specified, all six values have to be present. If it is not specified, all faces are rendered.
 
   <Parameter name="right" type="boolean">Controls the right side of the cubemap.</Parameter>
   <Parameter name="zleft" type="boolean">Controls the back side of the cubemap.</Parameter>

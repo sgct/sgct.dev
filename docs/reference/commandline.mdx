@@ -1,7 +1,7 @@
 import Argument from '/src/components/Argument/Argument';
 
 # Commandline arguments
-Any application build with SGCT can receive the following commandline options that control the applications behavior.
+Any application built with SGCT can receive the following commandline options that control the application's behavior.
 
 ## Arguments
 <Argument name="--config" alias="-c" value="string">
@@ -37,7 +37,7 @@ Disables the frame synchronization entirely, which will completely decouple the 
 </Argument>
 
 <Argument name="--notify" value="debug, info, warning, or error">
-Sets the notification level of the Log to include only the messages of the chosen log level or higher. Setting this value to debug achieves the same as setting the -debug commandline flag. If --debug and --notify is specified in the same command --notify takes precedence.
+Sets the notification level of the Log to include only the messages of the chosen log level or higher. Setting this value to debug achieves the same as setting the `--debug` commandline flag. If `--debug` and `--notify` are specified in the same command, `--notify` takes precedence.
 </Argument>
 
 <Argument name="--number-capture-threads" value="integer">
@@ -45,11 +45,11 @@ Sets the maximum number of threads that should be used for frame capturing. If n
 </Argument>
 
 <Argument name="--screenshot-path" value="string">
-Sets the base file path in which screenshots are stored. Each screenshot be stored with a unique base name and a frame counter.
+Sets the base file path in which screenshots are stored. Each screenshot will be stored with a unique base name and a frame counter.
 </Argument>
 
 <Argument name="--screenshot-prefix" value="string">
-Sets the prefix used for the screenshots taken by this application. The default value for the prefix is “SGCT”.
+Sets the prefix used for the screenshots taken by this application. The default value for the prefix is `SGCT`.
 </Argument>
 
 <Argument name="--add-node-name-in-screenshot">
@@ -61,7 +61,7 @@ If set, screenshots will not contain the name of the window if multiple windows 
 </Argument>
 
 <Argument name="--print-wait-message">
-If this is flag is provided, SGCT will print a message to the console log while the server is waiting for all clients to connect.
+If this flag is provided, SGCT will print a message to the console log while the server is waiting for all clients to connect.
 </Argument>
 
 <Argument name="--wait-timeout" value="float">

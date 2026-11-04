@@ -6,7 +6,7 @@ Specifies a single tracking device that belongs to a specific tracker group.
 
 ## Parameters
 <Parameter name="name" type="string">
-Specifies the name of the device so that it can be referenced by a User or can be accessed programmatically by the application.
+Specifies the name of the device so that it can be referenced by a [User](user) or can be accessed programmatically by the application.
 </Parameter>
 
 <Parameter name="sensors" type="Object[]" optional>
@@ -30,10 +30,10 @@ Specifies the name of the device so that it can be referenced by a User or can b
   <Parameter name="count" type="integer">The number of axes that are advertised by this VRPN device.</Parameter>
 </Parameter>
 
-<Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional>
-A linear offset that is added to the entire device. Must define three float attributes x, y, and z. The default values are x=0, y=0, z=0, leading to no offset being applied.
+<Parameter name="offset" type={<Link to="/docs/reference/configuration/basetypes#vec3">vec3</Link>} optional default="0,0,0">
+A linear offset that is added to the entire device. Must define the three values `x`, `y`, and `z`.
 </Parameter>
 
 <Parameter name="transformation" type={<Link to="/docs/reference/configuration/basetypes#mat4">mat4</Link>} optional>
-A generic transformation matrix that is applied to this device. This value will overwrite the value specified in `orientation`. All 16 of these values have to be present in this attribute and have to be floating point values and are used in this order to initialize the matrix in a column-major order.
+A generic transformation matrix that is applied to this device. All 16 values have to be present, have to be floating point values, and are used in this order to initialize the matrix in column-major order.
 </Parameter>

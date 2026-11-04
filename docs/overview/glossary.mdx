@@ -1,0 +1,81 @@
+---
+sidebar_position: 5
+---
+
+# Glossary
+This page contains short definitions of the terms that are used throughout this documentation, with links to the pages that describe them in more detail.
+
+## Black level mask
+A grayscale image that is multiplied with the rendering of a viewport to even out the black level of overlapping projectors. See the [`blacklevelmask`](/docs/reference/configuration/viewport#blacklevelmask) value of a viewport.
+
+## Blend mask
+A black and white image that removes parts of the rendering of a viewport, for example to hide the overlap between projectors. See the [`blendmask`](/docs/reference/configuration/viewport#blendmask) value of a viewport.
+
+## Calibrator
+A test application that comes with SGCT and renders test patterns, which makes it useful to verify a configuration file. All images in this documentation were rendered with it. See [Calibrator](/docs/building/calibrator).
+
+## Callback
+A function that the application registers in the `Engine::Callbacks` struct and that SGCT calls at a specific stage of the frame. See [How it works](/docs/overview/how-it-works).
+
+## Client
+Every [node](#node) of a cluster that is not the [server](#server). Clients receive the [shared data](#shared-data) from the server and render their part of the image.
+
+## Cluster
+The collection of all [nodes](#node) that together run one SGCT application. A cluster is described by a single [configuration file](#configuration-file). See [Cluster](/docs/reference/configuration/cluster).
+
+## Configuration file
+The JSON file that describes the cluster, its nodes, windows, viewports, and users. It is passed to the application with the [`--config`](/docs/reference/commandline#config) argument. See [Configuration files](/docs/reference/configuration/).
+
+## Cube map
+Six square images, the faces of a cube, that together show everything around the camera. The [non-linear projections](#non-linear-projection) render a cube map first and reproject it into their final image.
+
+## Dome master
+A square image containing a circular [fisheye](/docs/reference/configuration/projections/fisheyeprojection) rendering, which is the common format for content that is shown in planetarium domes.
+
+## Eye separation
+The distance between the left and the right eye of a [user](#user) that is used to compute the two images for [stereoscopic](#stereoscopy) rendering. See the [`eyeseparation`](/docs/reference/configuration/user#eyeseparation) value of a user.
+
+## Frame lock
+The synchronization at the end of every frame that makes the server wait for all clients to finish rendering before the buffers are swapped. See [Synchronization](/docs/overview/synchronization).
+
+## Frustum
+The pyramid-shaped volume that is visible through a viewport, described by the field of view, the near plane, and the far plane. SGCT computes the frustum of each viewport from its [projection](#projection) and the position of the [user](#user).
+
+## Image generator (IG)
+A computer that renders a part of the final image. In a cluster, each [node](#node) is an image generator.
+
+## Node
+A single instance of the application in a [cluster](#cluster). In general, a node corresponds to a single computer, but multiple nodes can run on the same computer for testing. See [Node](/docs/reference/configuration/node).
+
+## Non-linear projection
+A [projection](#projection) whose image cannot be described by a single frustum, such as the fisheye, cylindrical, equirectangular, spherical mirror, or cubemap projections. SGCT renders these by calling the application's `draw` callback once for every face of a [cube map](#cube-map) and reprojecting the result.
+
+## Projection
+The method that determines how the 3D scene is rendered into a viewport. SGCT supports many different projection types, see [Projections](/docs/reference/configuration/projections).
+
+## Server
+The [node](#node) that controls the cluster. It sends the [shared data](#shared-data) to the [clients](#client) and coordinates the [frame lock](#frame-lock). The configuration file and parts of the API use the older term *master* for the server, for example in the `masteraddress` value of the [Cluster](/docs/reference/configuration/cluster) and in `Engine::isMaster`.
+
+## Shared data
+The application state that the server sends to all clients every frame so that all nodes render the same scene. See [Shared data](/docs/overview/shared-data).
+
+## Stereoscopy
+Rendering a separate image for the left and the right eye to create the impression of depth. See [Stereoscopy](/docs/reference/stereoscopy).
+
+## Swap group
+A group of NVIDIA graphics cards whose buffer swaps are synchronized in hardware by a swap barrier, which is enabled with the [`swaplock`](/docs/reference/configuration/node#swaplock) value of a node. See [Synchronization](/docs/overview/synchronization#swap-lock).
+
+## User
+The position and orientation from which the scene is viewed, including the [eye separation](#eye-separation). See [User](/docs/reference/configuration/user).
+
+## Viewport
+A rectangular part of a [window](#window) into which content is rendered with a specific [projection](#projection). See [Viewport](/docs/reference/configuration/viewport).
+
+## V-Sync
+Synchronizing the buffer swaps of a window with the refresh rate of the display to prevent tearing. See the [`swapinterval`](/docs/reference/configuration/settings#display-swapinterval) setting.
+
+## Warping mesh
+A mesh that distorts the rendering of a viewport so that it appears correct on a curved display surface or when it is projected from an angle. See [Mesh formats](/docs/reference/mesh-formats).
+
+## Window
+An operating system window that belongs to a [node](#node) and contains one or more [viewports](#viewport). See [Window](/docs/reference/configuration/window).

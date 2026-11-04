@@ -1,16 +1,50 @@
+---
+sidebar_position: 1
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Building SGCT from source
-The requirements for building SGCT are:
+SGCT is built with CMake and resolves all of its third-party dependencies through [vcpkg](https://github.com/microsoft/vcpkg) in manifest mode, so the only prerequisites are:
 
   - CMake version 4.0 or above
-  - C++ compiler supporting C++23 (Visual Studio 2016 18, GCC 15, or Clang 21)
+  - C++ compiler supporting C++23 (Visual Studio 2026 (version 18), GCC 15, or Clang 21)
   - vcpkg installation
 
+SGCT supports Windows and Linux are supported, but does not work on macOS.
+
+## Prerequisites
 CMake can be downloaded and installed from a package manager (`winget`, `apt`, `yum`, etc) or from the [CMake homepage](https://cmake.org/).
 
-SGCT uses [vcpkg](https://github.com/microsoft/vcpkg) for dependency management. It needs to be installed to be able to compile SGCT and use it in any application. [This page](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started?pivots=shell-powershell) contains detailed information how to install it for different operating systems. **Note**: It is also advised to define `VCPKG_DEFAULT_BINARY_CACHE` as an environment variable and point it to a folder on disk that will be used as a vcpkg cache. This setting overrides where compiled dependencies will be cached and we recommend to place that cache next to the vcpkg install (for example, if `C:/vcpkg` is the vcpkg install directory, use `C:/vcpkg-cache`).
+vcpkg needs to be installed to be able to compile SGCT and use it in any application. [This page](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started?pivots=shell-powershell) contains detailed information how to install it for different operating systems. The CMake presets that come with SGCT locate vcpkg through the `VCPKG_ROOT` environment variable, which has to point at the vcpkg checkout:
+
+<Tabs>
+  <TabItem value="windows" label="Windows" default>
+    ```powershell
+    $env:VCPKG_ROOT = "C:\path\to\vcpkg"
+    ```
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+    ```bash
+    export VCPKG_ROOT=/path/to/vcpkg
+    ```
+  </TabItem>
+</Tabs>
+
+It is also advised to define `VCPKG_DEFAULT_BINARY_CACHE` as an environment variable and point it to a folder on disk that will be used as a vcpkg cache. This setting overrides where compiled dependencies will be cached and we recommend to place that cache next to the vcpkg install (for example, if `C:/vcpkg` is the vcpkg install directory, use `C:/vcpkg-cache`).
+
+### Linux system packages
+vcpkg builds GLFW from source, which needs the X11 development headers from the system package manager. On Ubuntu, the GLFW port of vcpkg asks for:
+
+```bash
+sudo apt install libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config
+```
+
+Other distributions provide the same libraries under different package names. For Wayland, see the [GLFW compilation guide](https://www.glfw.org/docs/latest/compile.html#compile_deps_wayland). The Linux presets select the GLVND OpenGL libraries (`OpenGL_GL_PREFERENCE=GLVND`).
+
+## Building
+The repository contains a `CMakePresets.json` that wires in the vcpkg toolchain file (`$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake`) and places the build in `build/<preset>`. The first configuration downloads and builds all dependencies, which takes a while; subsequent runs are served from vcpkg's binary cache.
 
 <Tabs>
   <TabItem value="IDE" label="IDE" default>
@@ -28,5 +62,22 @@ SGCT uses [vcpkg](https://github.com/microsoft/vcpkg) for dependency management.
     1. Configure with preset (`cmake --preset <preset>`)
     1. Pick a build preset (`cmake --build --list-presets`)
     1. Build with preset (`cmake --build --preset <preset>`)
+    1. Optionally, run the unit tests (`ctest --preset <preset>`)
   </TabItem>
 </Tabs>
+
+The libraries are written to `build/<preset>/lib` and the executables, such as the [Calibrator](/docs/building/calibrator), to `build/<preset>/bin`. The Visual Studio generator adds a subfolder for the configuration, for example `build/windows-msvc/bin/Debug`.
+
+## Build options
+SGCT has different CMake options that control which parts of SGCT are built.
+
+## Using SGCT in your project
+SGCT is not part of the public vcpkg registry. Instead, the repository contains a vcpkg port in `support/vcpkg/ports/sgct` that can be registered as an overlay port in the `vcpkg-configuration.json` of your own project:
+
+```json
+{
+  "overlay-ports": [ "path/to/sgct/support/vcpkg/ports" ]
+}
+```
+
+See [Getting started](/docs/building/getting-started) for how to link against SGCT from CMake, either through this port or by including SGCT as a submodule.

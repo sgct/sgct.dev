@@ -4,7 +4,7 @@ import equirectangularJson from './equirectangular.json?raw';
 import equirectangularImage from './equirectangular.webp';
 
 # Equirectangular Projection
-This projection method renders an equirectangular projection (also called lat-long projection or equidistant cylindrical projection) is a default projection method used for spherical objects or maps.
+This projection method renders an equirectangular projection (also called lat-long projection or equidistant cylindrical projection), which is a common projection method for spherical objects or maps. The resulting image covers the full sphere around the camera with an aspect ratio of 2:1.
 
 ## Parameters
 <Parameter name="type" type="string">
@@ -13,6 +13,10 @@ Defines the type of this projection. To use the Equirectangular Projection, this
 
 <Parameter name="quality" type={<Link to="/docs/reference/configuration/basetypes#quality">Quality</Link>} optional default="512">
 Determines the pixel resolution of the cube map faces that are individually rendered to create the equirectangular rendering.
+</Parameter>
+
+<Parameter name="orientation" type={<Link to="/docs/reference/configuration/basetypes#orientation">Orientation</Link>} optional>
+Describes a fixed orientation of the camera from which the equirectangular projection is rendered. This can be provided either as Euler angles or as a quaternion.
 </Parameter>
 
 ## Examples

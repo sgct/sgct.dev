@@ -7,6 +7,8 @@
     "start": "docusaurus start",
     "build": "docusaurus build",
     "generate-api": "node scripts/generate-api.mjs",
+    "validate-configs": "node scripts/validate-configs.mjs",
+    "lint": "markdownlint-cli2 \"docs/**/*.mdx\" \"src/pages/**/*.mdx\" \"README.md\"",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -25,14 +27,15 @@
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "remark-code-import": "^1.2.0"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.10.2",
     "@docusaurus/tsconfig": "3.10.2",
     "@docusaurus/types": "3.10.2",
     "@types/react": "^19.0.0",
+    "ajv": "^8.20.0",
+    "markdownlint-cli2": "^0.24.0",
     "typescript": "~6.0.2"
   },
   "browserslist": {

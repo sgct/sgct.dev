@@ -4,7 +4,7 @@ import sphericalmirrorJson from './sphericalmirror.json?raw';
 import sphericalmirrorImage from './sphericalmirror.webp';
 
 # Spherical Mirror Projection
-Used to create a projection used for Paul Bourke’s spherical mirror setup (see here), which makes it possible to use an off-the-shelf projector to create a planetarium-like environment by bouncing the image of a shiny metal mirror. Please note that this is not the only way to produce these kind of images. Depending on your setup and availability of warping meshes, it might suffice to use the FisheyeProjection node type instead and add a single mesh to the parent Viewport instead. The config folder in SGCT contains an example of this using a default 16x9 warping mesh. This projection type specifically deals with the case where you have four different meshes, one for the bottom, top, left, and right parts of the distorted image.
+Used to create a projection for [Paul Bourke's spherical mirror setup](https://paulbourke.net/dome/), which makes it possible to use an off-the-shelf projector to create a planetarium-like environment by bouncing the image off a shiny metal mirror. Please note that this is not the only way to produce these kinds of images. Depending on your setup and availability of warping meshes, it might suffice to use the [FisheyeProjection](/docs/reference/configuration/projections/fisheyeprojection) instead and add a single [mesh](/docs/reference/configuration/viewport#mesh) to the parent viewport. The `config` folder in SGCT contains an example of this using a default 16x9 warping mesh. This projection type specifically deals with the case where you have four different meshes, one for the bottom, top, left, and right parts of the distorted image.
 
 ## Parameters
 <Parameter name="type" type="string">
@@ -15,21 +15,21 @@ Defines the type of this projection. To use the Spherical Mirror Projection, thi
 Determines the pixel resolution of the cube map faces that are individually rendered to create the spherical mirror rendering.
 </Parameter>
 
-<Parameter name="tilt" type="number" optional default="0">
-Determines the tilt of the "up vector" of the spherical mirror projection. With a tilt of 0, the center of the spherical mirror image is the apex of the half-sphere that is used to reproject the cube map.
+<Parameter name="orientation" type={<Link to="/docs/reference/configuration/basetypes#orientation">Orientation</Link>} optional>
+Provides the ability to orient the spherical mirror projection. This can be provided either as Euler angles or as a quaternion. This value replaces the `tilt` value of version 1 configuration files; a `tilt` of `x` corresponds to an orientation with a `pitch` of `-x` and a `yaw` and `roll` of `0`. If this value is not specified, the center of the spherical mirror image is the apex of the half-sphere that is used to reproject the cube map.
 </Parameter>
 
 <Parameter name="background" type={<Link to="/docs/reference/configuration/basetypes#color">color</Link>} optional default="0.3, 0.3, 0.3, 1.0">
-This value determines the color that is used for the parts of the image that are not covered by the spherical mirror image. The alpha component of this color has to be provided even if the final render target does not contain an alpha channel, in which case the alpha value is ignored. All attributes r, g, b, and a must be defined and be between 0 and 1.
+This value determines the color that is used for the parts of the image that are not covered by the spherical mirror image. The alpha component of this color has to be provided even if the final render target does not contain an alpha channel, in which case the alpha value is ignored. All values `r`, `g`, `b`, and `a` must be defined and be between 0 and 1.
 </Parameter>
 
 <Parameter name="geometry" type="Object">
-  Describes the warping meshes used for the spherical mirror projection. All four warping meshes have to be present and are specified relative to the location of the configuration file.
+  Describes the warping meshes used for the spherical mirror projection. All four warping meshes have to be present and are specified relative to the location of the configuration file. The supported file formats are described on the [Mesh formats](/docs/reference/mesh-formats) page.
 
   <Parameter name="bottom" type="string">The path to the warping mesh that is loaded for the bottom part of the spherical mirror projection.</Parameter>
-  <Parameter name="left" type="string">The path to the warping mesh that is loaded for the bottom part of the spherical mirror projection.</Parameter>
-  <Parameter name="right" type="string">The path to the warping mesh that is loaded for the bottom part of the spherical mirror projection.</Parameter>
-  <Parameter name="top" type="string">The path to the warping mesh that is loaded for the bottom part of the spherical mirror projection.</Parameter>
+  <Parameter name="left" type="string">The path to the warping mesh that is loaded for the left part of the spherical mirror projection.</Parameter>
+  <Parameter name="right" type="string">The path to the warping mesh that is loaded for the right part of the spherical mirror projection.</Parameter>
+  <Parameter name="top" type="string">The path to the warping mesh that is loaded for the top part of the spherical mirror projection.</Parameter>
 </Parameter>
 
 ## Examples

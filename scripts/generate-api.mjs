@@ -140,7 +140,7 @@ function main() {
       console.warn(`Skipping API generation: ${msg}`);
       return;
     }
-    throw new Error(message);
+    throw new Error(msg);
   }
 
   const required = requiredDoxygenVersion();

@@ -1,7 +1,7 @@
 import Parameter from '/src/components/Parameter/Parameter';
 
 # Base Types
-The types in this file are considered base types in the sense that are reused among many types in the configuration files.
+The types in this file are considered base types in the sense that they are reused among many types in the configuration files.
 
 ## ivec2
 A type that represents a two-vector only accepting integer values.
@@ -30,7 +30,7 @@ A type that represents a four-vector accepting floating point values.
 <Parameter name="w" type="number" />
 
 ## color
-A type that represents a color value that is represented by four numerical values for the `r`ed, `g`reen, `b`lue, and `a`lpha channels as floating point numbers.
+A type that represents a color value that is represented by four numerical values for the `r`ed, `g`reen, `b`lue, and `a`lpha channels as floating point numbers between `0` and `1`.
 
 <Parameter name="r" type="number" />
 <Parameter name="g" type="number" />
@@ -38,16 +38,16 @@ A type that represents a color value that is represented by four numerical value
 <Parameter name="a" type="number" />
 
 ## mat4
-A list of 16 floating-point numbers that represent a generic 4x4 matrix.
+A list of 16 floating-point numbers that represent a generic 4x4 matrix in column-major order.
 
 ## Orientation
-These two types represent orientations. Regardless of how they are expressed, they can be used interchangably.
+These two types represent orientations. Regardless of how they are expressed, they can be used interchangeably.
 
 ### Yaw/Pitch/Roll
 Represents an orientation as a collection of Euler angles in `yaw`, `pitch`, and `roll`. These will always be provided in degrees, not radians.
 
-<Parameter name="pitch" type="number" />
 <Parameter name="yaw" type="number" />
+<Parameter name="pitch" type="number" />
 <Parameter name="roll" type="number" />
 
 ### Quaternion

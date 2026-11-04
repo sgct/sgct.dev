@@ -1,11 +1,22 @@
+import Gallery from '/src/components/Gallery/Gallery';
+import cubemapImage from './cubemapprojection/cubemap.webp';
+import cylindricalImage from './cylindricalprojection/cylindrical.webp';
+import equirectangularImage from './equirectangularprojection/equirectangular.webp';
+import fisheyeImage from './fisheyeprojection/fisheye.webp';
+import planarImage from './planarprojection/planar-symmetric.webp';
+import projectionplaneImage from './projectionplane/projectionplane.webp';
+import sphericalmirrorImage from './sphericalmirrorprojection/sphericalmirror.webp';
+
 # Projections
 This page lists all of the different projection types that are supported by SGCT.
 
-  - [CubemapProjection](cubemapprojection)
-  - [CylindricalProjection](cylindricalprojection)
-  - [EquirectangularProjection](equirectangularprojection)
-  - [FisheyeProjection](fisheyeprojection)
-  - [PlanarProjection](planarprojection)
-  - [ProjectionPlane](projectionplane)
-  - [SphericalMirrorProjection](sphericalmirrorprojection)
-  - [TextureMappedProjection](texturemappedprojection)
+<Gallery items={[
+  {name: 'CubemapProjection', to: '/docs/reference/configuration/projections/cubemapprojection', image: cubemapImage},
+  {name: 'CylindricalProjection', to: '/docs/reference/configuration/projections/cylindricalprojection', image: cylindricalImage},
+  {name: 'EquirectangularProjection', to: '/docs/reference/configuration/projections/equirectangularprojection', image: equirectangularImage},
+  {name: 'FisheyeProjection', to: '/docs/reference/configuration/projections/fisheyeprojection', image: fisheyeImage},
+  {name: 'PlanarProjection', to: '/docs/reference/configuration/projections/planarprojection', image: planarImage},
+  {name: 'ProjectionPlane', to: '/docs/reference/configuration/projections/projectionplane', image: projectionplaneImage},
+  {name: 'SphericalMirrorProjection', to: '/docs/reference/configuration/projections/sphericalmirrorprojection', image: sphericalmirrorImage},
+  {name: 'TextureMappedProjection', to: '/docs/reference/configuration/projections/texturemappedprojection'},
+]} />

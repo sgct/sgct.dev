@@ -1,0 +1,109 @@
+---
+sidebar_position: 3
+---
+
+# Shared data
+In a cluster, every node runs its own copy of the application. Anything that influences the rendering, such as the simulation time, the camera position, or the state of user interface toggles, therefore has to be identical on all nodes in every frame. SGCT achieves this by letting the server serialize the application state into a buffer once per frame, sending that buffer to all clients, and handing it to the application on each client to deserialize. The order of these steps within a frame is shown in [How it works](/docs/overview/how-it-works).
+
+## Callbacks
+Two members of `sgct::Engine::Callbacks` are responsible for the shared data:
+
+  - `encode` has the signature `std::vector<std::byte> encode()`. It is only called on the server, once per frame, directly after the `preSync` callback and on the same (main) thread. The returned buffer is sent unchanged to every client. The callback is also called when the cluster consists only of the server.
+  - `decode` has the signature `void decode(const std::vector<std::byte>& data)`. It is only called on the clients and receives exactly the buffer that the server's `encode` returned for that frame. It is called on SGCT's network thread rather than on the main thread, so it should only copy values into the application state and not make any OpenGL calls. If the server's buffer is empty, `decode` is not called.
+
+The clients wait in the frame lock stage for the server's message of the current frame before they continue with `postSyncPreDraw` and the drawing, which makes `postSyncPreDraw` the natural place to act on the newly received values. The [Synchronization](/docs/overview/synchronization) page describes this waiting in more detail.
+
+To find out whether the current node is the server, for example to only advance a simulation on the server, use `sgct::Engine::instance().isMaster()`. It returns `true` on the server, including when the application is not running as part of a cluster at all.
+
+## Serialization helpers
+The `sgct/shareddata.h` header, which is included by `sgct/sgct.h`, provides two families of helper functions that append values to a buffer and read them back in the same order:
+
+  - `serializeObject(std::vector<std::byte>& buffer, T value)` appends a single value
+  - `serializeObject(std::vector<std::byte>& buffer, const std::vector<T>& value)` appends the number of elements followed by the elements
+  - `serializeObject` overloads for `std::string_view`, `const std::string&`, and `const std::wstring&` append the length of the string followed by its characters
+  - `deserializeObject(const std::vector<std::byte>& buffer, unsigned int& pos, T& value)` reads a single value at `pos` and advances `pos` past it
+  - `deserializeObject(const std::vector<std::byte>& buffer, unsigned int& pos, std::vector<T>& value)` reads a vector written by the corresponding `serializeObject` overload
+  - `deserializeObject` overloads for `std::string&` and `std::wstring&` read a string written by one of the string overloads
+
+The values have to be read in exactly the same order in which they were written, as the buffer does not contain any type information.
+
+## Example
+The following application shares a time value, a rotation angle, a flag, and a string from the server to all clients:
+
+```cpp
+#include <sgct/sgct.h>
+
+namespace {
+  struct State {
+    double time = 0.0;
+    float rotation = 0.f;
+    bool showGrid = true;
+  };
+  State state;
+  std::string message = "Hello";
+} // namespace
+
+void preSync() {
+  // Only the server changes the state, the clients receive it in `decode`
+  if (sgct::Engine::instance().isMaster()) {
+    state.time = sgct::time();
+    state.rotation += 0.01f;
+  }
+}
+
+std::vector<std::byte> encode() {
+  std::vector<std::byte> data;
+  sgct::serializeObject(data, state.time);
+  sgct::serializeObject(data, state.rotation);
+  sgct::serializeObject(data, state.showGrid);
+  sgct::serializeObject(data, message);
+  return data;
+}
+
+void decode(const std::vector<std::byte>& data) {
+  unsigned int pos = 0;
+  sgct::deserializeObject(data, pos, state.time);
+  sgct::deserializeObject(data, pos, state.rotation);
+  sgct::deserializeObject(data, pos, state.showGrid);
+  sgct::deserializeObject(data, pos, message);
+}
+
+void draw(const sgct::RenderData& data) {
+  // Render the scene using `state`, which is now identical on all nodes
+}
+
+int main(int argc, char** argv) {
+  std::vector<std::string> arg(argv + 1, argv + argc);
+  sgct::Configuration config = sgct::parseArguments(arg);
+  sgct::config::Cluster cluster = sgct::loadCluster(config.configFilename);
+  if (!cluster.success) {
+    return EXIT_FAILURE;
+  }
+
+  sgct::Engine::Callbacks callbacks;
+  callbacks.preSync = preSync;
+  callbacks.encode = encode;
+  callbacks.decode = decode;
+  callbacks.draw = draw;
+
+  try {
+    sgct::Engine::create(cluster, callbacks, config);
+  }
+  catch (const std::runtime_error& e) {
+    sgct::Log::Error(e.what());
+    sgct::Engine::destroy();
+    return EXIT_FAILURE;
+  }
+
+  sgct::Engine::instance().exec();
+  sgct::Engine::destroy();
+  return EXIT_SUCCESS;
+}
+```
+
+The Calibrator application in the SGCT repository uses the same pattern to share its toggles between all nodes.
+
+## What can be shared
+The single-value and vector overloads copy the bytes of the value as they are in memory and refuse, at compile time, any type that is not both [trivial](https://en.cppreference.com/w/cpp/types/is_trivial) and [standard-layout](https://en.cppreference.com/w/cpp/types/is_standard_layout). Fundamental types such as `int`, `float`, `double`, and `bool` fulfill these requirements, as do plain structs of them. A struct stops being trivial as soon as it has a constructor or a default member initializer, which is why the example above shares the members of `State` one by one instead of the whole struct. The `glm` vector and matrix types are not trivial either, as SGCT compiles GLM with `GLM_FORCE_CTOR_INIT`; share their components individually. Classes that manage resources, such as `std::string` or `std::vector`, do not qualify, which is why they have their own overloads.
+
+Even for types that pass this check, never share a pointer, or a struct that contains a pointer. The pointer value is copied verbatim and refers to memory that does not exist on the client machines. Refer to objects through identifiers, such as an index or a name, instead, and look the object up on each node after decoding.
