@@ -6,15 +6,15 @@ The `Cluster` is the root object of every configuration file. It describes the e
 
 ## Parameters
 <Parameter name="version" type="integer">
-The version of the configuration file format, which has to be `2`. This documentation describes version `2` of the configuration file. Files using version `1` are still accepted and are upgraded automatically when they are loaded; the only difference is that the `tilt` value of the [FisheyeProjection](/docs/reference/configuration/projections/fisheyeprojection) and the [SphericalMirrorProjection](/docs/reference/configuration/projections/sphericalmirrorprojection) was replaced by their `orientation`.
+The version of the configuration file format, which has to be `2`. This documentation describes version `2` of the configuration file. Files using version `1` are still accepted and are upgraded automatically when they are loaded; the only differences are that the `masteraddress` value was renamed to `serveraddress` and that the `tilt` value of the [FisheyeProjection](/docs/reference/configuration/projections/fisheyeprojection) and the [SphericalMirrorProjection](/docs/reference/configuration/projections/sphericalmirrorprojection) was replaced by their `orientation`.
 </Parameter>
 
-<Parameter name="masteraddress" type="string">
-Contains the address of the node that acts as the server for this cluster. This means that one of the [Node](node) objects described in this configuration file has to have an address that corresponds to this `masteraddress`. This value can be either an IP address or a DNS name, which will be resolved at application startup.
+<Parameter name="serveraddress" type="string">
+Contains the address of the node that acts as the server for this cluster. This means that one of the [Node](node) objects described in this configuration file has to have an address that corresponds to this `serveraddress`. This value can be either an IP address or a DNS name, which will be resolved at application startup.
 </Parameter>
 
 <Parameter name="nodes" type={<><Link to="/docs/reference/configuration/node">Node</Link>[]</>} optional>
-Each object in this array has to be a valid [Node](node). At least one of the described nodes has to have an address that matches the cluster's `masteraddress`.
+Each object in this array has to be a valid [Node](node). At least one of the described nodes has to have an address that matches the cluster's `serveraddress`.
 </Parameter>
 
 <Parameter name="users" type={<><Link to="/docs/reference/configuration/user">User</Link>[]</>} optional>

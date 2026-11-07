@@ -59,7 +59,7 @@ namespace {
 
 void preSync() {
   // Only the server's value matters, as it is sent to the clients in `encode`
-  if (Engine::instance().isMaster()) {
+  if (Engine::instance().isServer()) {
     currentTime = time();
   }
 }
@@ -158,7 +158,7 @@ hello-sgct --config two-nodes.json --local 1 --client
 The server waits until all clients have connected before it starts rendering, and both windows pulse in sync.
 
 ## Running on a cluster
-On an actual cluster, the application and the configuration file are copied to every computer, and the `address` of each [Node](/docs/reference/configuration/node) is set to the IP address or DNS name of the computer it should run on. The `masteraddress` of the [Cluster](/docs/reference/configuration/cluster) designates which of the nodes is the server. The application is then started on every computer with the same arguments:
+On an actual cluster, the application and the configuration file are copied to every computer, and the `address` of each [Node](/docs/reference/configuration/node) is set to the IP address or DNS name of the computer it should run on. The `serveraddress` of the [Cluster](/docs/reference/configuration/cluster) designates which of the nodes is the server. The application is then started on every computer with the same arguments:
 
 ```bash
 hello-sgct --config cluster.json

@@ -13,7 +13,7 @@ Two members of `sgct::Engine::Callbacks` are responsible for the shared data:
 
 The clients wait in the frame lock stage for the server's message of the current frame before they continue with `postSyncPreDraw` and the drawing, which makes `postSyncPreDraw` the natural place to act on the newly received values. The [Synchronization](/docs/overview/synchronization) page describes this waiting in more detail.
 
-To find out whether the current node is the server, for example to only advance a simulation on the server, use `sgct::Engine::instance().isMaster()`. It returns `true` on the server, including when the application is not running as part of a cluster at all.
+To find out whether the current node is the server, for example to only advance a simulation on the server, use `sgct::Engine::instance().isServer()`. It returns `true` on the server, including when the application is not running as part of a cluster at all.
 
 ## Serialization helpers
 The `sgct/shareddata.h` header, which is included by `sgct/sgct.h`, provides two families of helper functions that append values to a buffer and read them back in the same order:
@@ -45,7 +45,7 @@ namespace {
 
 void preSync() {
   // Only the server changes the state, the clients receive it in `decode`
-  if (sgct::Engine::instance().isMaster()) {
+  if (sgct::Engine::instance().isServer()) {
     state.time = sgct::time();
     state.rotation += 0.01f;
   }

@@ -36,7 +36,7 @@ Both scripts fetch the schema from GitHub and accept the same `SGCT_SOURCE_DIR` 
 ## Writing documentation
 The documentation pages are MDX files in `docs/`, split into the `overview`, `reference`, `building`, and `examples` folders that each have their own sidebar. The sidebars are generated from the folder structure; the order of the pages is set by the `sidebar_position` in the front matter of a page or by a `_category_.json` file in a folder. Links between pages use absolute paths such as `/docs/reference/configuration/window#stereo`.
 
-Lists are indented by two spaces, ordered lists use `1.` for every item, and the prose uses "server" and "client" for the roles of the nodes, even where the configuration file and the API use the older "master".
+Lists are indented by two spaces, ordered lists use `1.` for every item, and the prose uses "server" and "client" for the roles of the nodes.
 
 ### Components
 The following components are registered in `src/theme/MDXComponents.tsx` and can be used on every page:

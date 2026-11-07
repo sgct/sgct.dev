@@ -53,7 +53,7 @@ A [projection](#projection) whose image cannot be described by a single frustum,
 The method that determines how the 3D scene is rendered into a viewport. SGCT supports many different projection types, see [Projections](/docs/reference/configuration/projections). The most common type is the planar projection, in which a horizontal and vertical field of view is defined. Another often used type is the fisheye projection, in which multiple render passes are automatically combined to generate a square fisheye or [dome master](#dome-master) image.
 
 ## Server
-The [node](#node) that controls the cluster. It sends the [shared data](#shared-data) to the [clients](#client) and coordinates the [frame lock](#frame-lock). Even a cluster that only consists of a single node has a server, just without any clients. The configuration file and parts of the API use the older term *master* for the server, for example in the `masteraddress` value of the [Cluster](/docs/reference/configuration/cluster) and in `Engine::isMaster`.
+The [node](#node) that controls the cluster. It sends the [shared data](#shared-data) to the [clients](#client) and coordinates the [frame lock](#frame-lock). Even a cluster that only consists of a single node has a server, just without any clients.
 
 ## Shared data
 The application state that the server sends to all clients every frame so that all nodes render the same scene. See [Shared data](/docs/overview/shared-data).
