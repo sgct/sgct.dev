@@ -20,10 +20,6 @@ Forces the node configuration to be localhost. The index that is provided is the
 Sets the node to run as a client. This is only available when running as a local node, as otherwise the IP address is used to set the client and server setup.
 </Argument>
 
-<Argument name="--debug">
-Set the notification level of the Log to include Debug level messages which provides more information to debug potential bugs or issues from faulty configuration files.
-</Argument>
-
 <Argument name="--firm-sync">
 Enables a firm frame synchronization using whatever method that is available, overwriting the settings that are provided in the cluster configuration.
 </Argument>
@@ -36,8 +32,8 @@ Disables the firm frame synchronization, overwriting the settings that are provi
 Disables the frame synchronization entirely, which will completely decouple the rendering nodes. This should only be set if you are absolutely sure you know what you are doing.
 </Argument>
 
-<Argument name="--notify" value="debug, info, warning, or error">
-Sets the notification level of the Log to include only the messages of the chosen log level or higher. Setting this value to debug achieves the same as setting the `--debug` commandline flag. If `--debug` and `--notify` are specified in the same command, `--notify` takes precedence.
+<Argument name="--loglevel" value="debug, info, warning, or error" default="info">
+Sets the notification level of the Log to include only the messages of the chosen log level or higher. The `debug` level provides more information to debug potential bugs or issues from faulty configuration files.
 </Argument>
 
 <Argument name="--number-capture-threads" value="integer">

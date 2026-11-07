@@ -21,10 +21,6 @@ Each object in this array has to be a valid [Node](node). At least one of the de
 Each object in this array has to be a valid [User](user). The first value in the array is considered to be the default user for the application.
 </Parameter>
 
-<Parameter name="debuglog" type="boolean" optional default="false">
-Determines whether the logging should include `Debug` level log messages. By default only `Info` level log messages or above are added to the console, the file, or the registered callback. Log messages that are not logged are discarded. The [`--debug`](/docs/reference/commandline#debug) commandline argument has the same effect.
-</Parameter>
-
 <Parameter name="firmsync" type="boolean" optional default="false">
 Determines whether the server should frame lock and wait for all client nodes or not. It is also possible, and more advisable, to set the frame locking on an individual [Node](node) basis for the cases where not all nodes are part of a swap group. See [Synchronization](/docs/overview/synchronization) for more information.
 </Parameter>
