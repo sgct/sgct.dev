@@ -45,11 +45,23 @@ Sets the maximum number of threads that should be used for frame capturing. If n
 </Argument>
 
 <Argument name="--screenshot-path" value="string">
-Sets the base file path in which screenshots are stored. Each screenshot will be stored with a unique base name and a frame counter.
+Sets the base file path in which screenshots are stored. Each screenshot will be stored with a unique base name and a frame counter. By default, the screenshots are stored in the current working directory.
 </Argument>
 
 <Argument name="--screenshot-prefix" value="string">
 Sets the prefix used for the screenshots taken by this application. The default value for the prefix is `SGCT`.
+</Argument>
+
+<Argument name="--screenshot-range-begin" value="integer">
+The number of the first screenshot that will actually be stored, where the first screenshot has the number `0`. All previous screenshots will be skipped, but the screenshot counter will be increased either way. Negative values are ignored. By default, no screenshots are skipped at the beginning.
+</Argument>
+
+<Argument name="--screenshot-range-end" value="integer">
+The number of the first screenshot that will not be stored anymore. All screenshots starting with this number will be skipped. This value has to be larger than [`--screenshot-range-begin`](#screenshot-range-begin), or `0` if that is not provided, otherwise both values are ignored. By default, all remaining screenshots are stored.
+</Argument>
+
+<Argument name="--screenshot-bit-depth" value="8 or 16" default="8">
+The number of bits per color channel of the stored screenshots. The screenshot bit depth is independent of the window's [`bufferbitdepth`](/docs/reference/configuration/window#bufferbitdepth), as the framebuffer contents are converted when they are read back.
 </Argument>
 
 <Argument name="--add-node-name-in-screenshot">

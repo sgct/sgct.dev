@@ -31,7 +31,6 @@ const Pages = [
   { file: 'user.mdx', schema: '#/$defs/user' },
   { file: 'scene.mdx', schema: '#/$defs/scene' },
   { file: 'settings.mdx', schema: '#/$defs/settings' },
-  { file: 'capture.mdx', schema: '#/$defs/capture' },
   { file: 'tracker.mdx', schema: '#/$defs/tracker' },
   { file: 'device.mdx', schema: '#/$defs/device' },
   {
