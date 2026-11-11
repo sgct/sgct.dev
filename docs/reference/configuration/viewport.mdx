@@ -65,5 +65,5 @@ Allowed values: `center`, `left`, `right`
 </Parameter>
 
 <Parameter name="user" type="string" optional>
-The name of the [User](user) that this viewport should be linked to. If a viewport is linked to a user that has a sensor, the positions of the sensor will be automatically reflected in the user position that is used to render this viewport. The default is that the viewport is linked to the default user, which is the first user in the configuration file.
+The name of the [User](user) that this viewport should be linked to. If a viewport is linked to a user that has a sensor, the positions of the sensor will be automatically reflected in the user position that is used to render this viewport. The default is that the viewport is linked to the default user, which is the first user in the configuration file. If no user with the specified name exists, a warning is logged and the viewport is linked to the default user.
 </Parameter>
