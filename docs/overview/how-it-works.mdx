@@ -94,7 +94,7 @@ This stage distributes the shared data from the server to the clients. The clien
 This callback (`encode`) is only executed on the server, directly after the `preSync` callback, and the application is responsible to return a buffer containing the binary data that should be sent to the clients.
 
 #### Decode
-This callback (`decode`) will be called only on the clients at which time they can use the provided buffer to read the transferred data. This function is called on SGCT's network thread rather than the main thread, so it must not make any OpenGL calls.
+This callback (`decode`) will be called only on the clients at which time they can use the provided buffer to read the transferred data. It is called on the main thread once the server's data for the frame has been received and before the `postSyncPreDraw` callback.
 
 
 ### Post Synchronization Pre Draw (PostSyncPreDraw)
@@ -137,7 +137,7 @@ This callback (`postDraw`) is called after the rendering is finished and before 
 
 
 ### Frame lock
-In the case of a clustered environment with more than one node that are **not** connected via NVIDIA's swap barriers, this stage of the render loop will synchronize the server and clients via lightweight network packages such that the rendering on all nodes has finished before continuing. If there is only a single node or all nodes are in a swap group, this stage is effectively a null operation. The [Synchronization](/docs/overview/synchronization) page describes the different synchronization methods in more detail.
+In the case of a clustered environment with more than one node that are **not** connected via NVIDIA's swap barriers, this stage of the render loop synchronizes the server and clients via lightweight network packages. With firm synchronization, each client notifies the server once it has finished rendering, and the server waits until the rendering on all nodes has finished before continuing. If there is only a single node or all nodes are in a swap group, this stage is effectively a null operation. The [Synchronization](/docs/overview/synchronization) page describes the different synchronization methods in more detail.
 
 
 ### Swap Buffers

@@ -54,7 +54,7 @@ Sets the size of the window in pixels.
 </Parameter>
 ```
 
-Every `Parameter` and `Argument` creates an anchor from its name. Nested parameters prefix their anchor with the anchor of their parent, so the `swapinterval` inside `display` can be linked as `#display-swapinterval`.
+Every `Parameter` and `Argument` creates an anchor from its name. Nested parameters prefix their anchor with the anchor of their parent, so the `author` inside `meta` can be linked as `#meta-author`.
 
 ### Adding an example
 Each example is a folder that contains the page, the configuration file, and an image of the result:

@@ -18,7 +18,11 @@ If this value is set, a socket connection is opened at the provided port that ca
 </Parameter>
 
 <Parameter name="swaplock" type="boolean" optional default="false">
-Determines whether this node should be part of an NVIDIA swap group and should use the swap barrier. Please note that this feature only works on Windows and requires professional NVIDIA graphics cards that are connected with NVIDIA sync cards. See [Synchronization](/docs/overview/synchronization#swap-lock) for more information on swap groups.
+Determines whether this node should be part of an NVIDIA swap group and should use the swap barrier. Please note that this feature only works on Windows and requires professional NVIDIA graphics cards that are connected with NVIDIA sync cards. It also requires [`vsync`](#vsync) to be enabled; otherwise SGCT logs a warning. See [Synchronization](/docs/overview/synchronization#swap-lock) for more information on swap groups.
+</Parameter>
+
+<Parameter name="vsync" type="boolean" optional default="false">
+Determines whether this node synchronizes its buffer swaps with the vertical retrace of the monitor (V-Sync), which limits the frame rate to the refresh rate of the monitor. As the windows of a node swap their buffers one after another, only the last window of the node waits for the vertical retrace; waiting in every window would divide the frame rate by the number of windows. See [Synchronization](/docs/overview/synchronization#v-sync) for how V-Sync interacts with the synchronization of the cluster.
 </Parameter>
 
 <Parameter name="windows" type={<><Link to="/docs/reference/configuration/window">Window</Link>[]</>} optional>

@@ -29,7 +29,7 @@ Disables the firm frame synchronization, overwriting the settings that are provi
 </Argument>
 
 <Argument name="--ignore-sync">
-Disables the frame synchronization entirely, which will completely decouple the rendering nodes. This should only be set if you are absolutely sure you know what you are doing.
+Disables the frame synchronization entirely, which will completely decouple the rendering nodes. It has to be passed to all nodes, as a server with firm synchronization otherwise times out while waiting for the clients. This should only be set if you are absolutely sure you know what you are doing.
 </Argument>
 
 <Argument name="--loglevel" value="debug, info, warning, or error" default="info">
@@ -68,8 +68,8 @@ If set, screenshots will contain the name of the node in multi-node configuratio
 If set, screenshots will not contain the name of the window if multiple windows exist. The default is that the name of the window is included.
 </Argument>
 
-<Argument name="--print-wait-message">
-If this flag is provided, SGCT will print a message to the console log while the server is waiting for all clients to connect.
+<Argument name="--no-wait-message">
+If set, SGCT does not log a message when a node has been waiting for longer than one second on the other nodes during the rendering. By default, these messages are logged; see [Waiting and timeouts](/docs/overview/synchronization#waiting-and-timeouts).
 </Argument>
 
 <Argument name="--wait-timeout" value="float">

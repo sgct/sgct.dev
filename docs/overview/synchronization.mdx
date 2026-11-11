@@ -13,12 +13,12 @@ For a cluster to show a single coherent image, all of its nodes have to render t
 The steps below follow the order of the render loop shown in [How it works](/docs/overview/how-it-works):
 
 1. The server calls `preSync`, serializes its state using the `encode` callback, and sends the result to all clients, together with a frame number.
-1. Each client waits until the server's message for the frame has arrived, which triggers its `decode` callback, and then sends an acknowledgement back to the server.
+1. Each client waits until the server's message for the frame has arrived and then calls its `decode` callback. With loose synchronization, the client also sends an acknowledgement back to the server at this point.
 1. All nodes call `postSyncPreDraw`, render their windows, and call `postDraw`.
-1. With firm synchronization, the server now waits until every client has acknowledged the current frame. With loose synchronization, the server continues without waiting.
+1. With firm synchronization, each client now sends an acknowledgement back to the server, and the server waits until every client has acknowledged the current frame. With loose synchronization, the server continues without waiting.
 1. All nodes swap the front and back buffers of their windows.
 
-The clients therefore never render a frame without the server's data for it. The firm synchronization additionally prevents the server from running ahead of the clients.
+The clients therefore never render a frame without the server's data for it. The firm synchronization additionally makes the server wait until all clients have finished rendering a frame before it swaps its buffers, and as the server only sends the next frame afterwards, no node starts a frame before every node has finished the previous one.
 
 ## Firm and loose synchronization
 The `firmsync` value of the [Cluster](/docs/reference/configuration/cluster#firmsync) enables the firm frame lock. It is disabled by default, resulting in a loose synchronization. Firm synchronization is the right choice for setups that do not use swap lock and in which the images of the nodes are visible at the same time, such as a multi-projector dome, as it keeps all nodes on the same frame at the cost of the cluster running at the speed of its slowest node.
@@ -28,12 +28,14 @@ The configuration value can be overwritten at application start with the [`--fir
 ## Swap lock
 Setting `swaplock` to `true` on a [Node](/docs/reference/configuration/node#swaplock) makes SGCT join the node's windows to an NVIDIA swap group and bind it to the same swap barrier through the `WGL_NV_swap_group` OpenGL extension. With all nodes in the same swap barrier, the graphics cards present their frames in unison, which removes the tearing between neighboring displays or projectors that a purely network-based frame lock cannot fully prevent.
 
-Swap lock is only available on Windows and requires NVIDIA professional graphics cards that are connected to each other through NVIDIA's frame synchronization hardware (a Quadro Sync or NVIDIA Sync card). If the extension is not available, the node continues without swap groups; at startup, SGCT logs whether swap groups are supported by the hardware.
+Swap lock requires [V-Sync](#v-sync). The swap barrier releases the buffer swap of a window only after its swap interval has elapsed, so without V-Sync the buffer swaps are not synchronized with the vertical retrace and the displays of the nodes can still tear. SGCT logs a warning at startup if `swaplock` is enabled for a node that does not enable `vsync`.
+
+Swap lock is only available on Windows and requires NVIDIA professional graphics cards that are connected to each other through NVIDIA's frame synchronization hardware (a Quadro Sync or NVIDIA Sync card). If the extension is not available, the node continues without swap groups; at startup, SGCT logs whether swap groups are supported by the hardware. If the swap barrier cannot be bound, for example because the frame synchronization hardware is missing, SGCT logs an error and the node continues without the swap barrier.
 
 ## Waiting and timeouts
-All nodes of a cluster wait at startup until every node has connected, before the first frame is rendered. During the rendering, whenever a node has been waiting for longer than one second on the other nodes, SGCT logs a message that names the node it is waiting for, the frame numbers sent and received, and whether swap groups and swap barriers are active. These messages are enabled by default; the [`--print-wait-message`](/docs/reference/commandline#print-wait-message) argument enables them explicitly.
+All nodes of a cluster wait at startup until every node has connected, before the first frame is rendered. During the rendering, whenever a node has been waiting for longer than one second on the other nodes, SGCT logs a message that names the node it is waiting for, the frame numbers sent and received, and whether swap groups and swap barriers are active. These messages are enabled by default and can be disabled with the [`--no-wait-message`](/docs/reference/commandline#no-wait-message) argument.
 
 If a node waits longer than the timeout, SGCT terminates the application with an error ("No sync signal from server" on a client or "No sync signal from clients" on the server). The timeout defaults to 60 seconds and can be changed with the [`--wait-timeout`](/docs/reference/commandline#wait-timeout) argument, which takes the number of seconds.
 
 ## V-Sync
-Independent of the synchronization between nodes, the [`swapinterval`](/docs/reference/configuration/settings#display-swapinterval) value in the `display` settings controls the V-Sync of each node. A value of `0` disables V-Sync and `1` synchronizes the buffer swaps with the refresh rate of the monitor.
+The [`vsync`](/docs/reference/configuration/node#vsync) value of a [Node](/docs/reference/configuration/node) controls whether its buffer swaps are synchronized with the refresh rate of the monitor. Only the last window of a node waits for the vertical retrace, as the windows of a node swap their buffers one after another. The frame lock works independently of V-Sync, but [swap lock](#swap-lock) requires it.

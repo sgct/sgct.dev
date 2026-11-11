@@ -19,10 +19,3 @@ If this value is set to `true` and a non-linear projection method is provided in
 <Parameter name="precision" type="16 or 32" optional default="32">
 Determines the floating point precision for the normal and position textures if they are enabled. Setting this value if `normaltexture` and `positiontexture` are disabled does not have any effect.
 </Parameter>
-
-<Parameter name="display" type="Object" optional>
-  Settings specific for the handling of display-related settings for the whole application.
-
-  <Parameter name="swapinterval" type="integer" optional default="0">Determines the swap interval for the application. This determines the amount of V-Sync that should occur for the application. The two most common values for this are `0` for disabling V-Sync and `1` for regular V-Sync. The number provided determines the number of screen updates to wait before swapping the backbuffers and returning. For example on a 60Hz monitor, `"swapinterval": 1` would lead to a maximum of 60Hz frame rate, `"swapinterval": 2` would lead to a maximum of 30Hz frame rate. Using the same values for a 144Hz monitor would be a refresh rate of 144 and 72 respectively. See [Synchronization](/docs/overview/synchronization#v-sync) for how V-Sync interacts with the synchronization of the cluster.</Parameter>
-  <Parameter name="refreshrate" type="integer" optional>Determines the desired refresh rate for full-screen windows of this configuration. This value is disabled for windowed mode windows. The default value is the highest possible refresh rate.</Parameter>
-</Parameter>

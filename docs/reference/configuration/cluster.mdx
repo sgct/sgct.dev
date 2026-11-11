@@ -6,7 +6,7 @@ The `Cluster` is the root object of every configuration file. It describes the e
 
 ## Parameters
 <Parameter name="version" type="integer">
-The version of the configuration file format, which has to be `2`. This documentation describes version `2` of the configuration file. Files using version `1` are still accepted and are upgraded automatically when they are loaded; the only differences are that the `masteraddress` value was renamed to `serveraddress` and that the `tilt` value of the [FisheyeProjection](/docs/reference/configuration/projections/fisheyeprojection) and the [SphericalMirrorProjection](/docs/reference/configuration/projections/sphericalmirrorprojection) was replaced by their `orientation`.
+The version of the configuration file format, which has to be `2`. This documentation describes version `2` of the configuration file. Files using version `1` are still accepted and are upgraded automatically when they are loaded; the only differences are that the `masteraddress` value was renamed to `serveraddress`, that the `tilt` value of the [FisheyeProjection](/docs/reference/configuration/projections/fisheyeprojection) and the [SphericalMirrorProjection](/docs/reference/configuration/projections/sphericalmirrorprojection) was replaced by their `orientation`, and that the `swapinterval` value of the `display` [Settings](settings) was replaced by the [`vsync`](/docs/reference/configuration/node#vsync) value of the nodes. A `swapinterval` of `1` or higher enables `vsync` for all nodes.
 </Parameter>
 
 <Parameter name="serveraddress" type="string">
