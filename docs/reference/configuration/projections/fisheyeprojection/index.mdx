@@ -15,6 +15,10 @@ Defines the type of this projection. To use the Fisheye Projection, this value h
 Describes the field of view that is covered by the fisheye projection in degrees. The resulting image will always be a circle, and this value determines how much of a field of view is covered by this circle. Please note specifically that this also includes field-of-view settings >180, in which a larger distortion is applied to the image.
 </Parameter>
 
+<Parameter name="mapping" type="equidistant or equisolid" optional default="equidistant">
+Determines the function that maps the angle from the center of the fisheye to the radius of the resulting image. `equidistant` uses the classical fisheye projection, in which the radius is proportional to the angle, while `equisolid` (equal-area) preserves the area of the image. Please note that the `equisolid` mapping is only valid for fields of view up to 360 degrees.
+</Parameter>
+
 <Parameter name="quality" type={<Link to="/docs/reference/configuration/basetypes#quality">Quality</Link>} optional default="512">
 Determines the pixel resolution of the cube map faces that are individually rendered to create the fisheye rendering.
 </Parameter>

@@ -9,8 +9,8 @@ This type specifies a single window that is used to render content into. There c
 Sets the position of the window on the overall desktop space provided by the operating system. This object must have the integer values `x` and `y` that specify the x-y location of the window. Please note that these values also can be negative on some operating systems. On Windows, for example, the top left corner of the primary monitor is `(0,0)` in this coordinate system, but there can be additional monitors to the left or the top of the primary monitor, which would require negative numbers.
 </Parameter>
 
-<Parameter name="size" type={<Link to="/docs/reference/configuration/basetypes#ivec2">ivec2</Link>}>
-Sets the size of the window in pixels. This object must have the integer values `x` and `y` that determine the size of the window.
+<Parameter name="size" type={<Link to="/docs/reference/configuration/basetypes#ivec2">ivec2</Link>} optional>
+Sets the size of the window in pixels. This object must have the integer values `x` and `y` that determine the size of the window. If this value is not specified, the window is created with a size of two thirds of the width of the monitor selected by `monitor` at a 16:9 aspect ratio.
 </Parameter>
 
 <Parameter name="res" type={<Link to="/docs/reference/configuration/basetypes#ivec2">ivec2</Link>} optional>
